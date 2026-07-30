@@ -37,14 +37,17 @@ import type {
   DemoOutcome,
   Project,
   WorkflowExplorerDefinition,
+  WorkflowExplorerEdge,
   WorkflowExplorerNode,
   WorkflowNodeKind,
 } from "@/types";
 
 type DemoState = "idle" | "running" | DemoOutcome;
 
-const NODE_WIDTH = 148;
-const NODE_HEIGHT = 88;
+const NODE_WIDTH = 112;
+const NODE_HEIGHT = 92;
+const NODE_FACE_LEFT = 24;
+const NODE_FACE_SIZE = 64;
 
 const stateCopy: Record<DemoOutcome, string> = {
   success: "Simulation completed successfully.",
@@ -92,17 +95,36 @@ function NodeLogo({ kind }: { kind: WorkflowNodeKind }) {
 
 function edgePath(
   workflow: WorkflowExplorerDefinition,
-  fromId: string,
-  toId: string,
+  connection: WorkflowExplorerEdge,
 ) {
-  const from = workflow.nodes.find((item) => item.id === fromId);
-  const to = workflow.nodes.find((item) => item.id === toId);
+  const from = workflow.nodes.find((item) => item.id === connection.from);
+  const to = workflow.nodes.find((item) => item.id === connection.to);
   if (!from || !to) return "";
-  const x1 = from.x + NODE_WIDTH;
-  const y1 = from.y + NODE_HEIGHT / 2;
-  const x2 = to.x;
-  const y2 = to.y + NODE_HEIGHT / 2;
-  const bend = Math.max(48, Math.abs(x2 - x1) * 0.46);
+
+  const aiConnection = /model|tool|parser|embedding|document|splitter/i.test(connection.label ?? "");
+  if (aiConnection) {
+    const fromIsBelow = from.y > to.y;
+    const x1 = from.x + NODE_WIDTH / 2;
+    const y1 = from.y + (fromIsBelow ? 18 : NODE_FACE_SIZE + 10);
+    const x2 = to.x + NODE_WIDTH / 2;
+    const y2 = to.y + (fromIsBelow ? NODE_FACE_SIZE + 10 : 18);
+    const bend = Math.max(70, Math.abs(y2 - y1) * 0.46);
+    return `M ${x1} ${y1} C ${x1} ${y1 + (fromIsBelow ? -bend : bend)}, ${x2} ${y2 + (fromIsBelow ? bend : -bend)}, ${x2} ${y2}`;
+  }
+
+  const x1 = from.x + NODE_FACE_LEFT + NODE_FACE_SIZE;
+  const branchNumber = connection.label?.match(/^(\d)/)?.[1];
+  const branchOffset = branchNumber
+    ? 14 + Number(branchNumber) * 10
+    : connection.label === "true"
+      ? 20
+      : connection.label === "false" || connection.label === "fallback"
+        ? 54
+        : NODE_FACE_SIZE / 2;
+  const y1 = from.y + branchOffset;
+  const x2 = to.x + NODE_FACE_LEFT;
+  const y2 = to.y + NODE_FACE_SIZE / 2;
+  const bend = Math.max(58, Math.abs(x2 - x1) * 0.46);
   return `M ${x1} ${y1} C ${x1 + bend} ${y1}, ${x2 - bend} ${y2}, ${x2} ${y2}`;
 }
 
@@ -119,7 +141,7 @@ function WorkflowCanvas({
   selectedNode: string;
   onSelectNode: (node: WorkflowExplorerNode) => void;
 }) {
-  const [zoom, setZoom] = useState(0.62);
+  const [zoom, setZoom] = useState(workflow.initialZoom ?? 0.62);
   const visited = new Set(activePath.slice(0, activeIndex + 1));
   const current = activePath[activeIndex];
 
@@ -131,10 +153,10 @@ function WorkflowCanvas({
           <div><strong>{workflow.name}</strong><small>{workflow.trigger}</small></div>
         </div>
         <div className="zoom-controls" aria-label="Workflow zoom controls">
-          <button type="button" onClick={() => setZoom((value) => Math.max(0.5, value - 0.1))} aria-label="Zoom out"><ZoomOut /></button>
+          <button type="button" onClick={() => setZoom((value) => Math.max(0.12, value - 0.05))} aria-label="Zoom out"><ZoomOut /></button>
           <span>{Math.round(zoom * 100)}%</span>
-          <button type="button" onClick={() => setZoom((value) => Math.min(1, value + 0.1))} aria-label="Zoom in"><ZoomIn /></button>
-          <button type="button" onClick={() => setZoom(0.62)} aria-label="Reset zoom"><Maximize2 /></button>
+          <button type="button" onClick={() => setZoom((value) => Math.min(1, value + 0.05))} aria-label="Zoom in"><ZoomIn /></button>
+          <button type="button" onClick={() => setZoom(workflow.initialZoom ?? 0.62)} aria-label="Zoom to fit"><Maximize2 /></button>
         </div>
       </div>
 
@@ -148,6 +170,18 @@ function WorkflowCanvas({
               transform: `scale(${zoom})`,
             }}
           >
+            {workflow.notes?.map((note) => (
+              <article
+                className={`workflow-note note-${note.color}`}
+                key={note.id}
+                style={{ left: note.x, top: note.y, width: note.width, height: note.height }}
+                aria-label={`${note.title}. ${note.body}`}
+              >
+                <h4>{note.title}</h4>
+                <p>{note.body}</p>
+              </article>
+            ))}
+
             <svg className="workflow-connections" viewBox={`0 0 ${workflow.width} ${workflow.height}`} aria-hidden="true">
               <defs>
                 <marker id={`arrow-${workflow.id}`} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -158,11 +192,12 @@ function WorkflowCanvas({
                 const active = visited.has(connection.from) && visited.has(connection.to);
                 const from = workflow.nodes.find((item) => item.id === connection.from);
                 const to = workflow.nodes.find((item) => item.id === connection.to);
+                const aiConnection = /model|tool|parser|embedding|document|splitter/i.test(connection.label ?? "");
                 return (
-                  <g key={`${connection.from}-${connection.to}-${connection.label ?? ""}`} className={active ? "active" : ""}>
+                  <g key={`${connection.from}-${connection.to}-${connection.label ?? ""}`} className={`${active ? "active " : ""}${aiConnection ? "ai-connection" : ""}`}>
                     <path
                       className={connection.dashed ? "dashed" : ""}
-                      d={edgePath(workflow, connection.from, connection.to)}
+                      d={edgePath(workflow, connection)}
                       markerEnd={`url(#arrow-${workflow.id})`}
                     />
                     {connection.label && from && to && (
@@ -179,23 +214,25 @@ function WorkflowCanvas({
               <button
                 type="button"
                 key={item.id}
-                className={`explorer-node kind-${item.kind}${visited.has(item.id) ? " visited" : ""}${current === item.id ? " current" : ""}${selectedNode === item.id ? " selected" : ""}`}
+                className={`explorer-node kind-${item.kind}${item.disabled ? " disabled" : ""}${visited.has(item.id) ? " visited" : ""}${current === item.id ? " current" : ""}${selectedNode === item.id ? " selected" : ""}`}
                 style={{ "--node-x": `${item.x}px`, "--node-y": `${item.y}px` } as CSSProperties}
                 onClick={() => onSelectNode(item)}
                 aria-label={`${item.label}. ${item.subtitle}. Select to inspect node.`}
                 aria-pressed={selectedNode === item.id}
               >
                 <span className="node-connector input" />
-                <span className="node-logo"><NodeLogo kind={item.kind} /></span>
-                <span className="node-copy"><strong>{item.label}</strong><small>{item.subtitle}</small></span>
-                <span className="node-status">{visited.has(item.id) ? <CheckCircle2 /> : null}</span>
+                <span className="node-face">
+                  <span className="node-logo"><NodeLogo kind={item.kind} /></span>
+                  <span className="node-status">{visited.has(item.id) ? <CheckCircle2 /> : null}</span>
+                </span>
+                <span className="node-copy"><strong>{item.label}</strong><small>{item.subtitle}{item.disabled ? " · Disabled" : ""}</small></span>
                 <span className="node-connector output" />
               </button>
             ))}
           </div>
         </div>
       </div>
-      <p className="canvas-help">Select any node to inspect it. Use the zoom controls or scroll horizontally to explore the full workflow.</p>
+      <p className="canvas-help">Select any node to inspect it. Colored sections, disabled nodes, branch placement, and connection routes mirror the audited n8n canvas.</p>
     </div>
   );
 }
@@ -319,6 +356,7 @@ export function WorkflowDemo({ project }: { project: Project }) {
       </div>
 
       <WorkflowCanvas
+        key={workflow.id}
         workflow={workflow}
         activePath={activePath}
         activeIndex={activeStep}

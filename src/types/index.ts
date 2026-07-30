@@ -36,6 +36,7 @@ export interface WorkflowExplorerNode {
   x: number;
   y: number;
   details: string;
+  disabled?: boolean;
 }
 
 export interface WorkflowExplorerEdge {
@@ -43,6 +44,19 @@ export interface WorkflowExplorerEdge {
   to: string;
   label?: string;
   dashed?: boolean;
+}
+
+export type WorkflowNoteColor = "amber" | "red" | "green" | "blue" | "purple" | "slate";
+
+export interface WorkflowExplorerNote {
+  id: string;
+  title: string;
+  body: string;
+  color: WorkflowNoteColor;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 }
 
 export interface WorkflowExplorerDefinition {
@@ -53,6 +67,8 @@ export interface WorkflowExplorerDefinition {
   trigger: string;
   width: number;
   height: number;
+  initialZoom?: number;
+  notes?: WorkflowExplorerNote[];
   nodes: WorkflowExplorerNode[];
   edges: WorkflowExplorerEdge[];
   paths: Partial<Record<DemoOutcome, string[]>>;

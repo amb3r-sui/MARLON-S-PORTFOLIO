@@ -21,6 +21,15 @@ test("the complete seven-workflow RANA node set is preserved", () => {
     ranaWorkflows.reduce((total, workflow) => total + workflow.nodes.length, 0),
     125,
   );
+  assert.deepEqual(
+    ranaWorkflows.map((workflow) => workflow.edges.length),
+    [25, 9, 25, 28, 23, 8, 16],
+  );
+  assert.deepEqual(
+    ranaWorkflows.map((workflow) => workflow.notes?.length),
+    [7, 5, 7, 6, 6, 5, 6],
+  );
+  assert.ok(ranaWorkflows.every((workflow) => workflow.initialZoom && workflow.initialZoom < 0.5));
 
   const ranaNodeLabels = ranaWorkflows.flatMap((workflow) =>
     workflow.nodes.map((node) => node.label),
@@ -28,6 +37,10 @@ test("the complete seven-workflow RANA node set is preserved", () => {
   assert.ok(ranaNodeLabels.includes("Rana AI Receptionist"));
   assert.ok(ranaNodeLabels.includes("Notify Reception Staff in Telegram"));
   assert.ok(ranaNodeLabels.includes("Generate Gemini Embeddings"));
+  assert.equal(
+    ranaWorkflows.flatMap((workflow) => workflow.nodes).filter((node) => node.disabled).length,
+    3,
+  );
 });
 
 for (const workflow of workflows) {

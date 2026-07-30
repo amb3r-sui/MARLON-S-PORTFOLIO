@@ -1,4 +1,5 @@
 import type { DemoOutcome, WorkflowExplorerDefinition, WorkflowExplorerEdge, WorkflowExplorerNode, WorkflowNodeKind } from "@/types";
+import { applyRanaLayout } from "./rana-layouts.ts";
 
 const node = (
   id: string,
@@ -486,13 +487,13 @@ const b2bTriage: WorkflowExplorerDefinition = {
 
 export const workflowsByProject: Record<string, WorkflowExplorerDefinition[]> = {
   "rana-ai-receptionist-system": [
-    ranaGateway,
-    ranaIntake,
-    ranaBrain,
-    ranaCalendar,
-    ranaFollowup,
-    ranaEscalation,
-    ranaRag,
+    applyRanaLayout(ranaGateway),
+    applyRanaLayout(ranaIntake),
+    applyRanaLayout(ranaBrain),
+    applyRanaLayout(ranaCalendar),
+    applyRanaLayout(ranaFollowup),
+    applyRanaLayout(ranaEscalation),
+    applyRanaLayout(ranaRag),
   ],
   "inventory-rfq-automation": [inventoryStock, inventoryApproval, inventoryErrors],
   "b2b-ai-lead-triage": [b2bTriage],
