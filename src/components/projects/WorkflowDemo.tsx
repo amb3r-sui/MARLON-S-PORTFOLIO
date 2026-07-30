@@ -11,6 +11,7 @@ import {
   Combine,
   GitBranch,
   Maximize2,
+  Mail,
   Play,
   RefreshCcw,
   RotateCcw,
@@ -28,6 +29,7 @@ import {
   siN8n,
   siOdoo,
   siPostgresql,
+  siTelegram,
   type SimpleIcon,
 } from "simple-icons";
 import { workflowsByProject } from "@/data/workflows";
@@ -58,6 +60,7 @@ const brandNodes: Partial<Record<WorkflowNodeKind, SimpleIcon>> = {
   calendar: siGooglecalendar,
   gmail: siGmail,
   odoo: siOdoo,
+  telegram: siTelegram,
 };
 
 const conceptNodes = {
@@ -73,6 +76,7 @@ const conceptNodes = {
   wait: RefreshCcw,
   error: AlertTriangle,
   response: CircleStop,
+  email: Mail,
 } as const;
 
 function BrandNodeIcon({ icon }: { icon: SimpleIcon }) {

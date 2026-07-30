@@ -298,7 +298,7 @@ select option { background:#0a0f14; }
 .node-connector.output { right:-6px; }
 .kind-webhook { --node-color:#f06b55; }.kind-code { --node-color:#68c7e6; }.kind-condition { --node-color:#f2b34d; }
 .kind-postgres { --node-color:#699eca; }.kind-gemini { --node-color:#8d7efa; }.kind-calendar { --node-color:#4285f4; }
-.kind-gmail { --node-color:#ea4335; }.kind-odoo { --node-color:#b97fa8; }.kind-rag { --node-color:#53c8a3; }
+.kind-gmail,.kind-email { --node-color:#ea4335; }.kind-telegram { --node-color:#26a5e4; }.kind-odoo { --node-color:#b97fa8; }.kind-rag { --node-color:#53c8a3; }
 .kind-parser { --node-color:#a98fec; }.kind-execute { --node-color:#ff6d5a; }.kind-manual { --node-color:#8ccf72; }
 .kind-schedule { --node-color:#82bdf0; }.kind-error { --node-color:#e35d6a; }.kind-response { --node-color:#9aa5b1; }
 .kind-merge { --node-color:#d8995c; }.kind-wait { --node-color:#d9bf65; }

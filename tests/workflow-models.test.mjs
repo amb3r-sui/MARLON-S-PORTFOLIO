@@ -11,6 +11,25 @@ test("all eleven sanitized portfolio workflows are modeled", () => {
   assert.equal(workflowsByProject["b2b-ai-lead-triage"].length, 1);
 });
 
+test("the complete seven-workflow RANA node set is preserved", () => {
+  const ranaWorkflows = workflowsByProject["rana-ai-receptionist-system"];
+  assert.deepEqual(
+    ranaWorkflows.map((workflow) => workflow.nodes.length),
+    [25, 10, 21, 20, 21, 11, 17],
+  );
+  assert.equal(
+    ranaWorkflows.reduce((total, workflow) => total + workflow.nodes.length, 0),
+    125,
+  );
+
+  const ranaNodeLabels = ranaWorkflows.flatMap((workflow) =>
+    workflow.nodes.map((node) => node.label),
+  );
+  assert.ok(ranaNodeLabels.includes("Rana AI Receptionist"));
+  assert.ok(ranaNodeLabels.includes("Notify Reception Staff in Telegram"));
+  assert.ok(ranaNodeLabels.includes("Generate Gemini Embeddings"));
+});
+
 for (const workflow of workflows) {
   test(`${workflow.id} has a valid visual graph`, () => {
     assert.ok(workflow.nodes.length >= 7, "workflow should show meaningful node detail");

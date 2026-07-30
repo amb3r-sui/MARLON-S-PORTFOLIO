@@ -67,7 +67,7 @@ The portfolio does not claim verified revenue, time savings, conversion uplift, 
 
 The selected architecture is recreated as eleven original, n8n-inspired visual diagrams:
 
-- Seven RANA subsystem canvases
+- Seven full RANA subsystem canvases containing 125 visible workflow nodes
 - Three inventory and draft-RFQ canvases
 - One B2B lead-triage canvas
 
