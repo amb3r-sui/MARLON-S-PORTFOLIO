@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Github, Linkedin, Mail } from "lucide-react";
 import { navigation } from "@/data/navigation";
 import { profile } from "@/data/profile";
+import { SocialLinks } from "@/components/ui/SocialLinks";
 
 export function Footer() {
   return (
@@ -17,11 +17,7 @@ export function Footer() {
         </div>
         <div>
           <span className="eyebrow">Connect</span>
-          <div className="social-row">
-            <a href={profile.linkedIn} target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin /></a>
-            <a href={profile.github} target="_blank" rel="noreferrer" aria-label="GitHub"><Github /></a>
-            <a href={`mailto:${profile.email}`} aria-label="Email"><Mail /></a>
-          </div>
+          <SocialLinks />
         </div>
       </div>
       <div className="container footer-bottom">© {new Date().getFullYear()} {profile.name}. {profile.title}.</div>

@@ -12,6 +12,17 @@ export interface ProjectImage {
   alt: string;
 }
 
+export type DemoOutcome = "success" | "validation-error" | "duplicate" | "provider-failure" | "rate-limited";
+
+export interface DemoScenario {
+  id: string;
+  title: string;
+  description: string;
+  outcome: DemoOutcome;
+  sampleInput: Record<string, string>;
+  sampleOutput: string;
+}
+
 export interface Project {
   id: number;
   slug: string;
@@ -37,6 +48,17 @@ export interface Project {
   completed: string[];
   planned: string[];
   screenshots: ProjectImage[];
+  projectType: "Self-initiated portfolio project" | "Prototype implementation";
+  inputs: string[];
+  outputs: string[];
+  validationRules: string[];
+  businessImpact: string;
+  personalContribution: string[];
+  limitations: string[];
+  futureImprovements: string[];
+  architecture: string[];
+  demoMode: "simulation" | "none";
+  demoScenarios: DemoScenario[];
   githubUrl?: string;
   demoUrl?: string;
 }

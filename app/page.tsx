@@ -6,7 +6,8 @@ import { ProjectCard } from "@/components/projects/ProjectCard";
 import { CTA } from "@/components/ui/CTA";
 import { projects } from "@/data/projects";
 import { services } from "@/data/services";
-import { skillGroups, technologies } from "@/data/skills";
+import { skillGroups } from "@/data/skills";
+import { ToolGrid } from "@/components/ui/ToolGrid";
 
 const serviceIcons = [Workflow, Bot, Network, Braces, DatabaseZap, FileCheck2];
 const process = [
@@ -21,7 +22,7 @@ const process = [
 export default function Home() {
   return <>
     <Hero />
-    <section className="tech-strip"><div className="container"><p>Tools and platforms I work with</p><div className="marquee">{technologies.map((tool) => <span key={tool}>{tool}</span>)}</div></div></section>
+    <section className="tech-section"><div className="container"><SectionHeading eyebrow="Technology stack" title="Tools used across my automation work" description="Brand marks identify technologies only and do not imply sponsorship, certification, or partnership." /><ToolGrid /></div></section>
     <section className="section"><div className="container"><div className="section-top"><SectionHeading eyebrow="Selected work" title="Automation systems built around real operations" description="Portfolio projects that demonstrate workflow mapping, system integration, validation, monitoring, and careful human handoffs." /><Link href="/projects" className="text-link">Explore all projects <ArrowRight size={17} /></Link></div><div className="project-grid">{projects.filter((p) => p.featured).map((project) => <ProjectCard key={project.id} project={project} />)}</div></div></section>
     <section className="section section-muted"><div className="container"><SectionHeading eyebrow="Services" title="Focused help for connected business systems" description="Practical automation support for small teams, operators, and growing businesses." /><div className="service-preview-grid">{services.slice(0, 6).map((service, index) => { const Icon = serviceIcons[index]; return <article className="mini-card" key={service.title}><Icon /><h3>{service.title}</h3><p>{service.summary}</p></article>; })}</div><Link className="button button-secondary section-button" href="/services">View all services <ArrowRight size={17} /></Link></div></section>
     <section className="section"><div className="container"><SectionHeading eyebrow="Method" title="A clear process from discovery to improvement" /><div className="process-grid">{process.map(([num, title, copy]) => <article className="process-card" key={num}><span>{num}</span><h3>{title}</h3><p>{copy}</p></article>)}</div></div></section>

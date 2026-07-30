@@ -19,11 +19,9 @@ const pages = [
   ["/about", "Automation should make work clearer"],
   ["/services", "Practical automation help"],
   ["/contact", "Tell me about the process"],
-  ["/projects/multilingual-ai-receptionist", "Multilingual AI Receptionist"],
+  ["/projects/rana-ai-receptionist-system", "RANA AI Receptionist"],
   ["/projects/inventory-rfq-automation", "Inventory Replenishment"],
-  ["/projects/crm-lead-to-quote", "CRM Lead-to-Quote"],
-  ["/projects/airtable-data-sync", "Airtable Data Sync"],
-  ["/projects/order-processing-quotation", "Order Processing"],
+  ["/projects/b2b-ai-lead-triage", "B2B AI Lead Triage"],
 ];
 
 for (const [path, expected] of pages) {
@@ -46,4 +44,31 @@ test("production metadata replaces the starter preview", async () => {
   assert.match(html, /Marlon Magno/);
   assert.match(html, /og\.png/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/i);
+});
+
+test("theme initialization supports saved preference and system preference", async () => {
+  const response = await render();
+  const html = await response.text();
+  assert.match(html, /portfolio-theme/);
+  assert.match(html, /prefers-color-scheme:\s*light/);
+  assert.match(html, /document\.documentElement\.dataset\.theme/);
+});
+
+test("project simulations are explicitly sample-data only", async () => {
+  const response = await render("/projects/rana-ai-receptionist-system");
+  const html = await response.text();
+  assert.match(html, /Safe portfolio simulation/i);
+  assert.match(html, /No real customer records or production systems are accessed/i);
+  assert.match(html, /Run demo/i);
+  assert.doesNotMatch(html, /127\.0\.0\.1:5678|localhost:5678|webhook\/[A-Za-z0-9_-]+/i);
+});
+
+test("real profile links are rendered safely", async () => {
+  const response = await render("/contact");
+  const html = await response.text();
+  assert.match(html, /linkedin\.com\/in\/marlon-magno/);
+  assert.match(html, /github\.com\/amb3r-sui/);
+  assert.match(html, /marlonmagno322%40gmail\.com|marlonmagno322@gmail\.com/);
+  assert.match(html, /target="_blank"/);
+  assert.match(html, /noopener noreferrer/);
 });

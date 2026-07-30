@@ -16,5 +16,6 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body><a className="skip-link" href="#main">Skip to content</a><Navbar /><main id="main">{children}</main><Footer /><BackToTop /></body></html>;
+  const themeScript = `(()=>{try{const saved=localStorage.getItem("portfolio-theme");const system=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.dataset.theme=saved==="light"||saved==="dark"?saved:system}catch{document.documentElement.dataset.theme="dark"}})();`;
+  return <html lang="en" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{ __html: themeScript }} /></head><body><a className="skip-link" href="#main">Skip to content</a><Navbar /><main id="main">{children}</main><Footer /><BackToTop /></body></html>;
 }

@@ -9,7 +9,8 @@
     "dev": "vinext dev",
     "build": "vinext build",
     "start": "vinext start",
-    "test": "npm run build && node --test tests/rendered-html.test.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "pnpm build && node --test tests/rendered-html.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate"
   },
@@ -19,7 +20,8 @@
     "motion": "^12.23.12",
     "next": "16.2.6",
     "react": "19.2.6",
-    "react-dom": "19.2.6"
+    "react-dom": "19.2.6",
+    "simple-icons": "16.27.1"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.37.1",

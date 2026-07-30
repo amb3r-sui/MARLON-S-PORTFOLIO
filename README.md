@@ -1,11 +1,15 @@
 # Marlon Magno — AI Automation Specialist Portfolio
 
-A polished, multi-page portfolio for presenting automation projects to recruiters, clients, agencies, and remote employers. The content is intentionally honest: starter case studies are labeled as portfolio projects, expected impact is separated from verified results, and optional links are hidden until configured.
+A polished, multi-page portfolio for presenting automation projects to recruiters, clients, agencies, and remote employers. The content is intentionally honest: case studies are labeled as self-initiated portfolio projects or prototypes, expected impact is separated from verified results, and private implementations are not presented as public repositories.
 
 ## Features
 
 - Responsive Home, Projects, Project Case Study, About, Services, and Contact pages
 - Filterable project library powered by structured TypeScript data
+- Three evidence-based n8n case studies selected from a read-only workflow review
+- Safe, browser-only workflow simulations with success, validation, duplicate, provider-failure, rate-limit, and reset states
+- Light and dark themes with saved preference, system preference, and pre-render initialization
+- Official Simple Icons brand marks plus clear concept icons for non-brand technologies
 - Reusable workflow diagrams, project cards, service cards, fallbacks, and calls to action
 - Accessible mobile navigation, visible focus states, semantic structure, reduced-motion support, and labeled form validation
 - Safe contact form placeholder with loading, success, error, and unconfigured states
@@ -15,7 +19,7 @@ A polished, multi-page portfolio for presenting automation projects to recruiter
 
 ## Technology stack
 
-Next.js App Router, React, TypeScript (strict), Tailwind CSS, Lucide React, Motion, vinext, and Cloudflare Workers tooling.
+Next.js App Router, React, TypeScript (strict), Tailwind CSS, Lucide React, Simple Icons, Motion, vinext, and Cloudflare Workers tooling.
 
 ## Important folders
 
@@ -27,6 +31,7 @@ src/types/                   Shared TypeScript interfaces
 public/images/projects/      Project screenshots
 public/resume/               Public resume PDF
 .openai/hosting.json         Sites deployment metadata
+docs/workflow-review.md      Sanitized workflow inventory and selection rationale
 ```
 
 ## Installation and local development
@@ -41,8 +46,29 @@ Open the local URL printed by the development server (normally `http://localhost
 ## Production build
 
 ```bash
+pnpm typecheck
+pnpm lint
 pnpm build
+pnpm test
 ```
+
+`pnpm test` creates the production build and verifies page rendering, project routes, theme initialization, safe demo language, profile links, metadata, and not-found behavior.
+
+## Workflow case studies and demos
+
+- **RANA AI Receptionist and Booking System:** protected gateway, structured intake, approved RAG, controlled AI decision, deterministic booking, reminders, escalation, and audit paths.
+- **Inventory Replenishment and Draft RFQ Automation:** Odoo stock checks, PostgreSQL policies, duplicate controls, human approval, draft-only RFQ creation, and independent alerts.
+- **B2B AI Lead Triage with Human Review:** a fictional-data prototype for structured Gemini triage and salesperson review.
+
+The demos are frontend simulations. They use predefined sample records and local React state; they never call n8n, Odoo, Gemini, Google services, a CRM, a webhook, or a database. Success and failure results are illustrative rather than production evidence. See [the sanitized review](docs/workflow-review.md) for selection and exclusion decisions.
+
+## Theme system
+
+The root layout reads `portfolio-theme` from `localStorage` before the page paints. If no saved value exists, it follows `prefers-color-scheme`; dark is the safe fallback. The navigation toggle updates the document theme and persists the choice. CSS custom properties drive both palettes, and reduced-motion preferences remain respected.
+
+## Tool logos
+
+Brand logos come from the locally installed `simple-icons` package and inherit each brand's published color. Webhooks, REST APIs, AI models, and RAG systems are concepts rather than single vendor brands, so they use labeled Lucide icons. No logo is fetched from a third-party CDN at runtime.
 
 ## Portfolio customization
 
@@ -71,9 +97,9 @@ Save optimized `.webp`, `.png`, or `.jpg` files in `public/images/projects/`, th
 
 Place the real PDF at `public/resume/marlon-magno-resume.pdf`. The current download control checks that a PDF exists and shows “Resume coming soon” when it does not. Do not add invented education or employment details.
 
-### Replace social links
+### Social links
 
-Update `linkedIn`, `github`, and `email` once in `src/data/profile.ts`. The navigation, footer, contact page, and hero reuse those values.
+Update `linkedIn`, `github`, `onlineJobs`, and `email` once in `src/data/profile.ts`. The footer, contact page, and hero reuse those values. External profiles open in a new tab with `noopener noreferrer`; email uses a `mailto:` link.
 
 ## Contact form configuration
 
@@ -89,6 +115,15 @@ NEXT_PUBLIC_CONTACT_FORM_ENDPOINT=
 ```
 
 Never place private API keys in variables prefixed with `NEXT_PUBLIC_`.
+
+No n8n credential or local n8n URL is required by the portfolio demos. If a future server-side demo is approved, use private server-only variables such as:
+
+```env
+N8N_BASE_URL=
+N8N_DEMO_WEBHOOK_SECRET=
+```
+
+Do not prefix secrets with `NEXT_PUBLIC_`, commit them, display them in client-rendered code, or expose a local/private n8n instance directly to website visitors.
 
 ## Deployment
 
@@ -107,10 +142,14 @@ Connect the repository using Netlify’s current Next.js runtime, set the enviro
 
 This project includes vinext and the Sites Vite/Worker output. Build with the included script and deploy the generated worker-compatible `dist` artifact through the configured hosting workflow.
 
+The connected Sites deployment is intentionally private. Do not change it to public access without Marlon's explicit approval.
+
 ## Security checklist
 
-- [ ] Replace placeholder contact and social values
-- [ ] Review all environment variables and public files
+- [x] Replace placeholder contact and social values
+- [x] Keep portfolio demos disconnected from n8n and external providers
+- [x] Exclude local n8n URLs, private workflow IDs, credential values, and customer data
+- [ ] Review all environment variables and public files before each release
 - [ ] Confirm no secrets, tokens, private webhooks, or client data are committed
 - [ ] Add rate limiting and server-side validation before enabling the contact endpoint
 - [ ] Test the real contact provider from the production domain
@@ -120,4 +159,4 @@ This project includes vinext and the Sites Vite/Worker output. Build with the in
 
 ## MVP limitations
 
-There is no CMS, database, authentication, admin area, analytics, blog, real email backend, or verified client metrics. Those can be added later when there is a real operational need.
+There is no CMS, database, authentication, admin area, analytics, blog, real email backend, live workflow connection, or verified client metric. Provider actions and notifications in the demos are simulated. Production claims require provider sandbox testing, monitoring, user acceptance testing, and permission to publish supporting evidence.

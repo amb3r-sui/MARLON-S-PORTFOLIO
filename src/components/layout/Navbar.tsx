@@ -7,6 +7,7 @@ import { useState } from "react";
 import { navigation } from "@/data/navigation";
 import { profile } from "@/data/profile";
 import { ResumeButton } from "@/components/ui/ResumeButton";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -25,6 +26,7 @@ export function Navbar() {
               {item.label}
             </Link>
           ))}
+          <ThemeToggle />
           <ResumeButton compact />
         </div>
         <button className="menu-button" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="mobile-menu" aria-label={open ? "Close menu" : "Open menu"}>
@@ -37,6 +39,7 @@ export function Navbar() {
                 {item.label}
               </Link>
             ))}
+            <ThemeToggle />
             <ResumeButton />
           </div>
         )}
