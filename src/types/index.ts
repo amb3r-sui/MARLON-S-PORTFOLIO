@@ -23,6 +23,41 @@ export interface DemoScenario {
   sampleOutput: string;
 }
 
+export type WorkflowNodeKind =
+  | "manual" | "schedule" | "webhook" | "execute" | "code" | "condition"
+  | "postgres" | "gemini" | "calendar" | "gmail" | "odoo" | "rag"
+  | "parser" | "merge" | "wait" | "error" | "response";
+
+export interface WorkflowExplorerNode {
+  id: string;
+  label: string;
+  subtitle: string;
+  kind: WorkflowNodeKind;
+  x: number;
+  y: number;
+  details: string;
+}
+
+export interface WorkflowExplorerEdge {
+  from: string;
+  to: string;
+  label?: string;
+  dashed?: boolean;
+}
+
+export interface WorkflowExplorerDefinition {
+  id: string;
+  name: string;
+  shortName: string;
+  summary: string;
+  trigger: string;
+  width: number;
+  height: number;
+  nodes: WorkflowExplorerNode[];
+  edges: WorkflowExplorerEdge[];
+  paths: Partial<Record<DemoOutcome, string[]>>;
+}
+
 export interface Project {
   id: number;
   slug: string;

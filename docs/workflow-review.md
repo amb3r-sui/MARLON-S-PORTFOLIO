@@ -62,3 +62,15 @@ Seven workflows whose names identify them as QA, verification, cleanup, mock lif
 ## Evidence boundary
 
 The portfolio does not claim verified revenue, time savings, conversion uplift, production uptime, or customer outcomes. Business-impact language is intentionally framed as design intent. Screenshots use sanitized placeholders when an approved public visual is unavailable.
+
+## Portfolio workflow explorers
+
+The selected architecture is recreated as eleven original, n8n-inspired visual diagrams:
+
+- Seven RANA subsystem canvases
+- Three inventory and draft-RFQ canvases
+- One B2B lead-triage canvas
+
+Each canvas shows labeled nodes, directed connections, branch labels, trigger information, and a node inspector. Visitors can switch workflows, zoom, inspect nodes, edit fictional sample inputs, and animate success or controlled failure paths.
+
+These diagrams are manually modeled from the safe architectural observations above. They are not n8n exports and do not reproduce private workflow JSON, internal identifiers, credential metadata, real URLs, execution payloads, or customer data. All apparent provider activity is a local browser simulation.

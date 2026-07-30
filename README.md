@@ -7,7 +7,8 @@ A polished, multi-page portfolio for presenting automation projects to recruiter
 - Responsive Home, Projects, Project Case Study, About, Services, and Contact pages
 - Filterable project library powered by structured TypeScript data
 - Three evidence-based n8n case studies selected from a read-only workflow review
-- Safe, browser-only workflow simulations with success, validation, duplicate, provider-failure, rate-limit, and reset states
+- Eleven detailed, n8n-inspired workflow canvases with recognizable node types, connections, branch labels, zoom controls, and node inspection
+- Safe, browser-only workflow simulations with animated execution paths plus success, validation, duplicate, provider-failure, rate-limit, and reset states
 - Light and dark themes with saved preference, system preference, and pre-render initialization
 - Official Simple Icons brand marks plus clear concept icons for non-brand technologies
 - Reusable workflow diagrams, project cards, service cards, fallbacks, and calls to action
@@ -52,7 +53,7 @@ pnpm build
 pnpm test
 ```
 
-`pnpm test` creates the production build and verifies page rendering, project routes, theme initialization, safe demo language, profile links, metadata, and not-found behavior.
+`pnpm test` creates the production build and verifies page rendering, project routes, theme initialization, safe demo language, profile links, metadata, not-found behavior, all eleven workflow graphs, edge integrity, execution-path integrity, and absence of private n8n or secret material.
 
 ## Workflow case studies and demos
 
@@ -60,7 +61,9 @@ pnpm test
 - **Inventory Replenishment and Draft RFQ Automation:** Odoo stock checks, PostgreSQL policies, duplicate controls, human approval, draft-only RFQ creation, and independent alerts.
 - **B2B AI Lead Triage with Human Review:** a fictional-data prototype for structured Gemini triage and salesperson review.
 
-The demos are frontend simulations. They use predefined sample records and local React state; they never call n8n, Odoo, Gemini, Google services, a CRM, a webhook, or a database. Success and failure results are illustrative rather than production evidence. See [the sanitized review](docs/workflow-review.md) for selection and exclusion decisions.
+The workflow explorers recreate the visible business architecture as sanitized portfolio diagrams: seven RANA workflows, three inventory workflows, and one B2B lead-triage workflow. Visitors can switch workflows, inspect individual nodes, zoom the canvas, read branch labels, edit fictional sample inputs, and animate success or failure paths.
+
+These explorers are original UI simulations, not imported n8n JSON and not a copy of the private n8n editor. They use predefined sample records and local React state; they never call n8n, Odoo, Gemini, Google services, a CRM, a webhook, or a database. No credential metadata, authentication token, real endpoint, execution payload, workflow identifier, or customer record is included. Success and failure results are illustrative rather than production evidence. See [the sanitized review](docs/workflow-review.md) for selection and exclusion decisions.
 
 ## Theme system
 

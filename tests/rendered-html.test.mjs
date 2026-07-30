@@ -57,9 +57,12 @@ test("theme initialization supports saved preference and system preference", asy
 test("project simulations are explicitly sample-data only", async () => {
   const response = await render("/projects/rana-ai-receptionist-system");
   const html = await response.text();
-  assert.match(html, /Safe portfolio simulation/i);
-  assert.match(html, /No real customer records or production systems are accessed/i);
-  assert.match(html, /Run demo/i);
+  assert.match(html, /Isolated workflow simulation/i);
+  assert.match(html, /No n8n instance, credential, token, webhook, private workflow export, or production system is connected/i);
+  assert.match(html, /Rana 00 — AI Gateway and Abuse Protection/i);
+  assert.match(html, /Visible structure/i);
+  assert.match(html, /Node inspector/i);
+  assert.match(html, /Run sample/i);
   assert.doesNotMatch(html, /127\.0\.0\.1:5678|localhost:5678|webhook\/[A-Za-z0-9_-]+/i);
 });
 
