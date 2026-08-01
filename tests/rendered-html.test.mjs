@@ -14,7 +14,7 @@ async function render(path = "/") {
 }
 
 const pages = [
-  ["/", "Reliable systems"],
+  ["/", "Automation clients can"],
   ["/projects", "Systems designed"],
   ["/about", "Automation should make work clearer"],
   ["/services", "Practical automation help"],
@@ -42,7 +42,7 @@ test("production metadata replaces the starter preview", async () => {
   const response = await render();
   const html = await response.text();
   assert.match(html, /Marlon Magno/);
-  assert.match(html, /og-command-center\.png/);
+  assert.match(html, /og-operations-lab\.png/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/i);
 });
 
