@@ -60,6 +60,38 @@ const stateCopy: Record<DemoOutcome, string> = {
   "rate-limited": "A simulated rate limit queued a bounded retry.",
 };
 
+const outcomeCopy: Record<string, Record<DemoOutcome, string>> = {
+  "rana-ai-receptionist-system": {
+    success: "Booking inquiry prepared for controlled processing",
+    "validation-error": "Invalid inquiry stopped before integrations",
+    duplicate: "Repeated inquiry blocked before AI processing",
+    "provider-failure": "Inquiry routed to a safe human-review fallback",
+    "rate-limited": "Inquiry held for a bounded retry",
+  },
+  "inventory-rfq-automation": {
+    success: "Replenishment recommendation ready for human review",
+    "validation-error": "Incomplete purchasing data stopped safely",
+    duplicate: "Duplicate draft request prevented",
+    "provider-failure": "ERP failure recorded without creating a purchase",
+    "rate-limited": "ERP request queued for a bounded retry",
+  },
+  "b2b-ai-lead-triage": {
+    success: "Lead recommendation ready for salesperson review",
+    "validation-error": "Invalid lead stopped before AI processing",
+    duplicate: "Duplicate outreach prevented",
+    "provider-failure": "Lead retained for manual review",
+    "rate-limited": "Lead retained for a bounded retry",
+  },
+};
+
+const safeguardCopy: Record<DemoOutcome, string> = {
+  success: "Human decision boundary preserved",
+  "validation-error": "Input validation",
+  duplicate: "Duplicate protection",
+  "provider-failure": "Provider fallback",
+  "rate-limited": "Bounded retry policy",
+};
+
 const brandNodes: Partial<Record<WorkflowNodeKind, SimpleIcon>> = {
   postgres: siPostgresql,
   gemini: siGooglegemini,
@@ -356,6 +388,10 @@ export function WorkflowDemo({ project }: { project: Project }) {
   if (!workflow || !scenario) return null;
 
   const mockPayload = JSON.stringify(values, null, 2);
+  const finished = !["idle", "running"].includes(state);
+  const finalOutcome = finished ? state as DemoOutcome : resolvedOutcome;
+  const routeEnd = workflow.nodes.find((node) => node.id === activePath.at(-1))?.label ?? "Awaiting execution";
+  const businessOutcome = outcomeCopy[project.slug]?.[finalOutcome] ?? stateCopy[finalOutcome];
 
   return (
     <div className="demo-shell" data-testid="workflow-demo">
@@ -375,8 +411,8 @@ export function WorkflowDemo({ project }: { project: Project }) {
         </div>
         <ol>
           <li><span>1</span><div><strong>Choose a workflow</strong><small>Open any of the available sanitized canvases.</small></div></li>
-          <li><span>2</span><div><strong>Review the mock payload</strong><small>Edit the fictional customer details below.</small></div></li>
-          <li><span>3</span><div><strong>Execute and explore</strong><small>Watch the active route, then select nodes for details.</small></div></li>
+          <li><span>2</span><div><strong>Configure sample input</strong><small>Edit the fictional business details below.</small></div></li>
+          <li><span>3</span><div><strong>Run and review</strong><small>Read the business result and selected route; inspect technical details only if needed.</small></div></li>
         </ol>
       </section>
 
@@ -396,7 +432,7 @@ export function WorkflowDemo({ project }: { project: Project }) {
         ))}
       </div>
 
-      <section className="mock-workbench" aria-labelledby="mock-workbench-title">
+      <section className="mock-workbench outcome-first" aria-labelledby="mock-workbench-title">
         <div className="mock-form">
           <div className="mock-heading">
             <div><span className="eyebrow">Mock execution</span><h3 id="mock-workbench-title">Configure sample input</h3></div>
@@ -407,42 +443,12 @@ export function WorkflowDemo({ project }: { project: Project }) {
           <div className="demo-fields">{Object.entries(values).map(([key, value]) => <label key={key}>{key.replace(/([A-Z])/g, " $1").replace(/_/g, " ")}<input value={value} onChange={(event) => setValues((current) => ({ ...current, [key]: event.target.value }))} disabled={state === "running"} /></label>)}</div>
           <div className="button-row"><button className="button button-primary" type="button" onClick={runDemo} disabled={state === "running"} data-testid="run-demo"><Play size={16} />{state === "running" ? "Executing…" : "Execute with mock data"}</button><button className="button button-secondary" type="button" onClick={resetDemo} disabled={state === "running"} data-testid="reset-demo"><RotateCcw size={16} />Reset example</button></div>
         </div>
-        <div className="mock-payload" aria-label="Mock payload preview">
-          <div><span /><span /><span /><strong>INPUT · JSON</strong></div>
-          <pre>{mockPayload}</pre>
-          <small>Browser memory only · cleared when you refresh</small>
-        </div>
       </section>
-
-      <div className="workflow-summary">
-        <div><span className="eyebrow">Selected workflow</span><h3>{workflow.name}</h3><p>{workflow.summary}</p></div>
-        <div><small>Trigger</small><strong>{workflow.trigger}</strong><small>Visible structure</small><strong>{workflow.nodes.length} nodes · {workflow.edges.length} connections</strong></div>
-      </div>
-
-      <WorkflowCanvas
-        key={workflow.id}
-        workflow={workflow}
-        activePath={activePath}
-        activeIndex={activeStep}
-        state={state}
-        selectedNode={selectedNode}
-        onSelectNode={(item) => setSelectedNode(item.id)}
-        onExecute={runDemo}
-        onReset={resetDemo}
-      />
-
-      {inspectedNode && (
-        <div className="node-inspector" data-testid="node-inspector">
-          <span className={`node-logo kind-${inspectedNode.kind}`}><NodeLogo kind={inspectedNode.kind} /></span>
-          <div><span className="eyebrow">Node inspector</span><h3>{inspectedNode.label}</h3><p>{inspectedNode.details}</p></div>
-          <dl><div><dt>Node type</dt><dd>{inspectedNode.subtitle}</dd></div><div><dt>Mode</dt><dd>Sanitized simulation</dd></div></dl>
-        </div>
-      )}
 
       <div className="demo-layout execution-layout">
         <section className="demo-panel" aria-labelledby="demo-progress-title">
-          <span className="eyebrow">Active execution path</span>
-          <h3 id="demo-progress-title">Simulated node trace</h3>
+          <span className="eyebrow">Readable execution path</span>
+          <h3 id="demo-progress-title">What the automation is doing</h3>
           <ol className="demo-progress">{activePath.map((nodeId, index) => {
             const item = workflow.nodes.find((candidate) => candidate.id === nodeId);
             if (!item) return null;
@@ -451,14 +457,26 @@ export function WorkflowDemo({ project }: { project: Project }) {
         </section>
 
         <section className="demo-panel demo-output" aria-labelledby="demo-output-title" aria-live="polite">
-          <span className="eyebrow">Sanitized output</span>
-          <h3 id="demo-output-title">Simulation result</h3>
+          <span className="eyebrow">Business result</span>
+          <h3 id="demo-output-title">What a client would receive</h3>
           {state === "idle" && <p>Choose a scenario and run the sample to animate the corresponding branch through this workflow.</p>}
           {state === "running" && <p className="demo-running">Processing fictional sample data…</p>}
-          {!["idle", "running"].includes(state) && <div className={`demo-result ${state}`} data-testid="demo-result">{state === "success" ? <CheckCircle2 /> : <AlertTriangle />}<div><strong>{stateCopy[state as DemoOutcome]}</strong><p>{output}</p></div></div>}
+          {finished && <><div className={`demo-result ${state}`} data-testid="demo-result">{state === "success" ? <CheckCircle2 /> : <AlertTriangle />}<div><strong>{businessOutcome}</strong><p>{output}</p></div></div><div className="outcome-card-grid"><div><small>Final route</small><strong>{routeEnd}</strong></div><div><small>Safeguard demonstrated</small><strong>{safeguardCopy[finalOutcome]}</strong></div><div><small>External systems</small><strong>Simulated — none contacted</strong></div><div><small>Selected path</small><strong>{activePath.length} documented nodes</strong></div></div></>}
           <small>Every provider action, message, database record, booking, RFQ, and notification shown here is simulated.</small>
         </section>
       </div>
+
+      <details className="technical-payload">
+        <summary><Braces /> View technical input payload <span>Optional JSON</span></summary>
+        <div className="mock-payload" aria-label="Mock payload preview"><div><span /><span /><span /><strong>INPUT · JSON</strong></div><pre>{mockPayload}</pre><small>Browser memory only · cleared when you refresh</small></div>
+      </details>
+
+      <details className="full-workflow-details">
+        <summary><Workflow /> Inspect the full n8n-style workflow <span>{workflow.nodes.length} nodes · {workflow.edges.length} connections</span></summary>
+        <div className="workflow-summary"><div><span className="eyebrow">Selected workflow</span><h3>{workflow.name}</h3><p>{workflow.summary}</p></div><div><small>Trigger</small><strong>{workflow.trigger}</strong><small>Visible structure</small><strong>{workflow.nodes.length} nodes · {workflow.edges.length} connections</strong></div></div>
+        <WorkflowCanvas key={workflow.id} workflow={workflow} activePath={activePath} activeIndex={activeStep} state={state} selectedNode={selectedNode} onSelectNode={(item) => setSelectedNode(item.id)} onExecute={runDemo} onReset={resetDemo} />
+        {inspectedNode && <div className="node-inspector" data-testid="node-inspector"><span className={`node-logo kind-${inspectedNode.kind}`}><NodeLogo kind={inspectedNode.kind} /></span><div><span className="eyebrow">Node inspector</span><h3>{inspectedNode.label}</h3><p>{inspectedNode.details}</p></div><dl><div><dt>Node type</dt><dd>{inspectedNode.subtitle}</dd></div><div><dt>Mode</dt><dd>Sanitized simulation</dd></div></dl></div>}
+      </details>
     </div>
   );
 }

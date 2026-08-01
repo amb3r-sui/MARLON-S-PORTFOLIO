@@ -46,6 +46,14 @@ test("production metadata replaces the starter preview", async () => {
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/i);
 });
 
+test("homepage leads into real projects instead of a generic dashboard", async () => {
+  const response = await render();
+  const html = await response.text();
+  assert.match(html, /Choose a real system and test its business outcome/i);
+  assert.match(html, /RANA AI Receptionist/i);
+  assert.doesNotMatch(html, /Lead-to-CRM orchestration/i);
+});
+
 test("theme initialization supports saved preference and system preference", async () => {
   const response = await render();
   const html = await response.text();
@@ -66,6 +74,9 @@ test("project simulations are explicitly sample-data only", async () => {
   assert.match(html, /Configure sample input/i);
   assert.match(html, /Execute workflow/i);
   assert.match(html, /Fictional data only/i);
+  assert.match(html, /What a client would receive/i);
+  assert.match(html, /View technical input payload/i);
+  assert.match(html, /Inspect the full n8n-style workflow/i);
   assert.doesNotMatch(html, /127\.0\.0\.1:5678|localhost:5678|webhook\/[A-Za-z0-9_-]+/i);
 });
 
