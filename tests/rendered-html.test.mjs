@@ -62,7 +62,10 @@ test("project simulations are explicitly sample-data only", async () => {
   assert.match(html, /Rana 00 — AI Gateway and Abuse Protection/i);
   assert.match(html, /Visible structure/i);
   assert.match(html, /Node inspector/i);
-  assert.match(html, /Run sample/i);
+  assert.match(html, /Try the automation in three steps/i);
+  assert.match(html, /Configure sample input/i);
+  assert.match(html, /Execute workflow/i);
+  assert.match(html, /Fictional data only/i);
   assert.doesNotMatch(html, /127\.0\.0\.1:5678|localhost:5678|webhook\/[A-Za-z0-9_-]+/i);
 });
 

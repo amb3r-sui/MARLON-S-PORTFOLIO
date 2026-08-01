@@ -132,14 +132,20 @@ function WorkflowCanvas({
   workflow,
   activePath,
   activeIndex,
+  state,
   selectedNode,
   onSelectNode,
+  onExecute,
+  onReset,
 }: {
   workflow: WorkflowExplorerDefinition;
   activePath: string[];
   activeIndex: number;
+  state: DemoState;
   selectedNode: string;
   onSelectNode: (node: WorkflowExplorerNode) => void;
+  onExecute: () => void;
+  onReset: () => void;
 }) {
   const [zoom, setZoom] = useState(workflow.initialZoom ?? 0.62);
   const visited = new Set(activePath.slice(0, activeIndex + 1));
@@ -152,11 +158,20 @@ function WorkflowCanvas({
           <span className="n8n-mark"><BrandNodeIcon icon={siN8n} /></span>
           <div><strong>{workflow.name}</strong><small>{workflow.trigger}</small></div>
         </div>
-        <div className="zoom-controls" aria-label="Workflow zoom controls">
-          <button type="button" onClick={() => setZoom((value) => Math.max(0.12, value - 0.05))} aria-label="Zoom out"><ZoomOut /></button>
-          <span>{Math.round(zoom * 100)}%</span>
-          <button type="button" onClick={() => setZoom((value) => Math.min(1, value + 0.05))} aria-label="Zoom in"><ZoomIn /></button>
-          <button type="button" onClick={() => setZoom(workflow.initialZoom ?? 0.62)} aria-label="Zoom to fit"><Maximize2 /></button>
+        <div className="workflow-toolbar-actions">
+          <span className={`execution-status status-${state}`} aria-live="polite">
+            <i />{state === "idle" ? "Ready" : state === "running" ? "Executing" : "Run complete"}
+          </span>
+          <button className="n8n-reset" type="button" onClick={onReset} disabled={state === "running"} aria-label="Reset mock execution"><RotateCcw /></button>
+          <button className="n8n-execute" type="button" onClick={onExecute} disabled={state === "running"} data-testid="canvas-run-demo">
+            <Play />{state === "running" ? "Executing…" : "Execute workflow"}
+          </button>
+          <div className="zoom-controls" aria-label="Workflow zoom controls">
+            <button type="button" onClick={() => setZoom((value) => Math.max(0.12, value - 0.05))} aria-label="Zoom out"><ZoomOut /></button>
+            <span>{Math.round(zoom * 100)}%</span>
+            <button type="button" onClick={() => setZoom((value) => Math.min(1, value + 0.05))} aria-label="Zoom in"><ZoomIn /></button>
+            <button type="button" onClick={() => setZoom(workflow.initialZoom ?? 0.62)} aria-label="Zoom to fit"><Maximize2 /></button>
+          </div>
         </div>
       </div>
 
@@ -324,6 +339,8 @@ export function WorkflowDemo({ project }: { project: Project }) {
 
   if (!workflow || !scenario) return null;
 
+  const mockPayload = JSON.stringify(values, null, 2);
+
   return (
     <div className="demo-shell" data-testid="workflow-demo">
       <div className="demo-notice">
@@ -333,6 +350,19 @@ export function WorkflowDemo({ project }: { project: Project }) {
           Recreated architecture with fictional sample data. No n8n instance, credential, token, webhook, private workflow export, or production system is connected.
         </span>
       </div>
+
+      <section className="demo-guide" aria-labelledby="demo-guide-title">
+        <div>
+          <span className="eyebrow">Visitor guide</span>
+          <h3 id="demo-guide-title">Try the automation in three steps</h3>
+          <p>This is a safe portfolio sandbox. Nothing entered here is sent to n8n or any outside service.</p>
+        </div>
+        <ol>
+          <li><span>1</span><div><strong>Choose a workflow</strong><small>Open any of the seven RANA canvases.</small></div></li>
+          <li><span>2</span><div><strong>Review the mock payload</strong><small>Edit the fictional customer details below.</small></div></li>
+          <li><span>3</span><div><strong>Execute and explore</strong><small>Watch the active route, then select nodes for details.</small></div></li>
+        </ol>
+      </section>
 
       <div className="workflow-switcher" role="tablist" aria-label="Select a workflow to explore">
         {workflows.map((item) => (
@@ -350,6 +380,24 @@ export function WorkflowDemo({ project }: { project: Project }) {
         ))}
       </div>
 
+      <section className="mock-workbench" aria-labelledby="mock-workbench-title">
+        <div className="mock-form">
+          <div className="mock-heading">
+            <div><span className="eyebrow">Mock execution</span><h3 id="mock-workbench-title">Configure sample input</h3></div>
+            <span className="safe-data-badge"><ShieldCheck /> Fictional data only</span>
+          </div>
+          <label>Test scenario<select value={scenarioId} onChange={(event) => chooseScenario(event.target.value)} data-testid="demo-scenario">{project.demoScenarios.map((item) => <option key={item.id} value={item.id}>{item.title}</option>)}</select></label>
+          <p className="demo-description">{scenario.description}</p>
+          <div className="demo-fields">{Object.entries(values).map(([key, value]) => <label key={key}>{key.replace(/([A-Z])/g, " $1").replace(/_/g, " ")}<input value={value} onChange={(event) => setValues((current) => ({ ...current, [key]: event.target.value }))} disabled={state === "running"} /></label>)}</div>
+          <div className="button-row"><button className="button button-primary" type="button" onClick={runDemo} disabled={state === "running"} data-testid="run-demo"><Play size={16} />{state === "running" ? "Executing…" : "Execute with mock data"}</button><button className="button button-secondary" type="button" onClick={resetDemo} disabled={state === "running"} data-testid="reset-demo"><RotateCcw size={16} />Reset example</button></div>
+        </div>
+        <div className="mock-payload" aria-label="Mock payload preview">
+          <div><span /><span /><span /><strong>INPUT · JSON</strong></div>
+          <pre>{mockPayload}</pre>
+          <small>Browser memory only · cleared when you refresh</small>
+        </div>
+      </section>
+
       <div className="workflow-summary">
         <div><span className="eyebrow">Selected workflow</span><h3>{workflow.name}</h3><p>{workflow.summary}</p></div>
         <div><small>Trigger</small><strong>{workflow.trigger}</strong><small>Visible structure</small><strong>{workflow.nodes.length} nodes · {workflow.edges.length} connections</strong></div>
@@ -360,8 +408,11 @@ export function WorkflowDemo({ project }: { project: Project }) {
         workflow={workflow}
         activePath={activePath}
         activeIndex={activeStep}
+        state={state}
         selectedNode={selectedNode}
         onSelectNode={(item) => setSelectedNode(item.id)}
+        onExecute={runDemo}
+        onReset={resetDemo}
       />
 
       {inspectedNode && (
@@ -372,16 +423,7 @@ export function WorkflowDemo({ project }: { project: Project }) {
         </div>
       )}
 
-      <div className="demo-layout detailed">
-        <section className="demo-panel" aria-labelledby="demo-input-title">
-          <span className="eyebrow">Test with sample data</span>
-          <h3 id="demo-input-title">Run the selected workflow</h3>
-          <label>Scenario<select value={scenarioId} onChange={(event) => chooseScenario(event.target.value)} data-testid="demo-scenario">{project.demoScenarios.map((item) => <option key={item.id} value={item.id}>{item.title}</option>)}</select></label>
-          <p className="demo-description">{scenario.description}</p>
-          <div className="demo-fields">{Object.entries(values).map(([key, value]) => <label key={key}>{key}<input value={value} onChange={(event) => setValues((current) => ({ ...current, [key]: event.target.value }))} disabled={state === "running"} /></label>)}</div>
-          <div className="button-row"><button className="button button-primary" type="button" onClick={runDemo} disabled={state === "running"} data-testid="run-demo"><Play size={16} />{state === "running" ? "Running…" : "Run sample"}</button><button className="button button-secondary" type="button" onClick={resetDemo} data-testid="reset-demo"><RotateCcw size={16} />Reset</button></div>
-        </section>
-
+      <div className="demo-layout execution-layout">
         <section className="demo-panel" aria-labelledby="demo-progress-title">
           <span className="eyebrow">Active execution path</span>
           <h3 id="demo-progress-title">Simulated node trace</h3>
