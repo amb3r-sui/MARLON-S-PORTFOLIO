@@ -43,10 +43,18 @@ test("the complete seven-workflow RANA node set is preserved", () => {
   );
 });
 
+test("the three Inventory canvases match the audited n8n structures", () => {
+  const inventory = workflowsByProject["inventory-rfq-automation"];
+  assert.deepEqual(inventory.map((workflow) => workflow.nodes.length), [11, 14, 6]);
+  assert.deepEqual(inventory.map((workflow) => workflow.edges.length), [10, 15, 5]);
+  assert.deepEqual(inventory.map((workflow) => workflow.notes?.length), [3, 3, 2]);
+  assert.ok(inventory.every((workflow) => workflow.initialZoom && workflow.initialZoom < 0.5));
+});
+
 for (const workflow of workflows) {
   test(`${workflow.id} has a valid visual graph`, () => {
-    assert.ok(workflow.nodes.length >= 7, "workflow should show meaningful node detail");
-    assert.ok(workflow.edges.length >= 6, "workflow should show meaningful connections");
+    assert.ok(workflow.nodes.length >= 6, "workflow should show meaningful node detail");
+    assert.ok(workflow.edges.length >= 5, "workflow should show meaningful connections");
     assert.ok(workflow.width > 0 && workflow.height > 0);
 
     const nodeIds = new Set(workflow.nodes.map((node) => node.id));

@@ -71,6 +71,6 @@ The selected architecture is recreated as eleven original, n8n-inspired visual d
 - Three inventory and draft-RFQ canvases
 - One B2B lead-triage canvas
 
-Each RANA canvas preserves the audited node coordinates, connection topology, colored sticky-note sections, branch placement, AI sub-node relationships, and disabled-node states in a sanitized n8n-style renderer. A three-step visitor guide, editable fictional payload, and n8n-style execution toolbar let visitors switch workflows, zoom, inspect nodes, and animate success or controlled failure paths.
+Each RANA canvas preserves the audited node coordinates, connection topology, colored sticky-note sections, branch placement, AI sub-node relationships, and disabled-node states. The three Inventory canvases likewise preserve their audited visible node names, layout, colored sections, and connection branches in the sanitized n8n-style renderer. A three-step visitor guide, editable fictional payload, and n8n-style execution toolbar let visitors switch workflows, zoom, inspect nodes, and animate success or controlled failure paths.
 
 These diagrams are manually modeled from the safe architectural observations above. They are not n8n exports and do not reproduce private workflow JSON, internal identifiers, credential metadata, real URLs, execution payloads, or customer data. All apparent provider activity is a local browser simulation.

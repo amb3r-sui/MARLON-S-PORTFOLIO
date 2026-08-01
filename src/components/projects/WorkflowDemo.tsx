@@ -10,6 +10,7 @@ import {
   Code2,
   Combine,
   GitBranch,
+  Globe2,
   Maximize2,
   Mail,
   Play,
@@ -80,6 +81,7 @@ const conceptNodes = {
   error: AlertTriangle,
   response: CircleStop,
   email: Mail,
+  http: Globe2,
 } as const;
 
 function BrandNodeIcon({ icon }: { icon: SimpleIcon }) {
@@ -358,7 +360,7 @@ export function WorkflowDemo({ project }: { project: Project }) {
           <p>This is a safe portfolio sandbox. Nothing entered here is sent to n8n or any outside service.</p>
         </div>
         <ol>
-          <li><span>1</span><div><strong>Choose a workflow</strong><small>Open any of the seven RANA canvases.</small></div></li>
+          <li><span>1</span><div><strong>Choose a workflow</strong><small>Open any of the available sanitized canvases.</small></div></li>
           <li><span>2</span><div><strong>Review the mock payload</strong><small>Edit the fictional customer details below.</small></div></li>
           <li><span>3</span><div><strong>Execute and explore</strong><small>Watch the active route, then select nodes for details.</small></div></li>
         </ol>

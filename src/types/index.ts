@@ -25,7 +25,7 @@ export interface DemoScenario {
 
 export type WorkflowNodeKind =
   | "manual" | "schedule" | "webhook" | "execute" | "code" | "condition"
-  | "postgres" | "gemini" | "calendar" | "gmail" | "email" | "telegram" | "odoo" | "rag"
+  | "postgres" | "gemini" | "calendar" | "gmail" | "email" | "telegram" | "odoo" | "http" | "rag"
   | "parser" | "merge" | "wait" | "error" | "response";
 
 export interface WorkflowExplorerNode {
