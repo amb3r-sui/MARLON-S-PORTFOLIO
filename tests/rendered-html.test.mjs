@@ -15,7 +15,7 @@ async function render(path = "/") {
 
 const pages = [
   ["/", "Automation clients can"],
-  ["/projects", "Systems designed"],
+  ["/projects", "Enter the Project Lab"],
   ["/about", "Automation should make work clearer"],
   ["/services", "Practical automation help"],
   ["/contact", "Tell me about the process"],
@@ -67,6 +67,17 @@ test("project simulations are explicitly sample-data only", async () => {
   assert.match(html, /Execute workflow/i);
   assert.match(html, /Fictional data only/i);
   assert.doesNotMatch(html, /127\.0\.0\.1:5678|localhost:5678|webhook\/[A-Za-z0-9_-]+/i);
+});
+
+test("project lab cards use the audited workflow models", async () => {
+  const response = await render("/projects");
+  const html = await response.text();
+  assert.match(html, /11[^<]*Sanitized workflows/i);
+  assert.match(html, /163[^<]*Modeled nodes/i);
+  assert.match(html, /170[^<]*Mapped connections/i);
+  assert.match(html, /Rana 00 — AI Gateway and Abuse Protection/i);
+  assert.match(html, /Inventory Replenishment Stock Check/i);
+  assert.match(html, /B2B AI Lead Triage — Human Review Demo/i);
 });
 
 test("real profile links are rendered safely", async () => {
