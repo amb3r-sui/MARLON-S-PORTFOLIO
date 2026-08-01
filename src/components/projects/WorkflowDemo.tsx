@@ -468,6 +468,10 @@ export function WorkflowDemo({ project }: { project: Project }) {
 
       <details className="technical-payload">
         <summary><Braces /> View technical input payload <span>Optional JSON</span></summary>
+        <div className="payload-explainer">
+          <div><ShieldCheck /><span><strong>What is this payload?</strong><p>This fictional input object shows how customer or business data is structured before validation and workflow processing. It stays in your browser and is never sent to n8n, an API, or a production system.</p></span></div>
+          <dl><div><dt>Purpose</dt><dd>Technical input inspection</dd></div><div><dt>Storage</dt><dd>Browser memory only</dd></div><div><dt>Connected systems</dt><dd>None</dd></div></dl>
+        </div>
         <div className="mock-payload" aria-label="Mock payload preview"><div><span /><span /><span /><strong>INPUT · JSON</strong></div><pre>{mockPayload}</pre><small>Browser memory only · cleared when you refresh</small></div>
       </details>
 

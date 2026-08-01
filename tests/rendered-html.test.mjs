@@ -76,6 +76,10 @@ test("project simulations are explicitly sample-data only", async () => {
   assert.match(html, /Fictional data only/i);
   assert.match(html, /What a client would receive/i);
   assert.match(html, /View technical input payload/i);
+  assert.match(html, /What is this payload/i);
+  assert.match(html, /Technical input inspection/i);
+  assert.match(html, /Browser memory only/i);
+  assert.match(html, /Connected systems/i);
   assert.match(html, /Inspect the full n8n-style workflow/i);
   assert.doesNotMatch(html, /127\.0\.0\.1:5678|localhost:5678|webhook\/[A-Za-z0-9_-]+/i);
 });
