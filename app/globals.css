@@ -321,34 +321,36 @@ select option { background:#0a0f14; }
 .workflow-connections { position:absolute; inset:0; z-index:1; width:100%; height:100%; overflow:visible; pointer-events:none; }
 .workflow-connections path { fill:none; stroke:#8b939d; stroke-width:2.2; transition:stroke .2s,stroke-width .2s; }
 .workflow-connections .dashed { stroke-dasharray:7 6; }
-.workflow-connections marker path { fill:#59616d; stroke:none; }
 .workflow-connections .ai-connection>path { stroke:#9a7bed; stroke-dasharray:7 5; }
-.workflow-connections g.active>path { stroke:#61d6ef; stroke-width:3; filter:drop-shadow(0 0 4px rgba(97,214,239,.45)); }
+.workflow-connections g.active>path,.workflow-connections g.active.ai-connection>path { stroke:#17c964; stroke-width:3; filter:drop-shadow(0 0 4px rgba(23,201,100,.38)); }
 .workflow-connections text { fill:#c3c9d0; font:650 11px sans-serif; text-anchor:middle; paint-order:stroke; stroke:#11141a; stroke-width:6px; stroke-linejoin:round; }
+.workflow-connections g.active text { fill:#d7f8e5; }
 .explorer-node { --node-color:#a7b0bb; position:absolute; left:var(--node-x); top:var(--node-y); z-index:2; width:112px; height:92px; padding:0; color:#e8ebef; background:transparent; border:0; cursor:pointer; text-align:center; transition:filter .16s; }
 .explorer-node:hover,.explorer-node:focus-visible,.explorer-node.selected { filter:brightness(1.16); outline:none; }
 .node-face { position:absolute; left:24px; top:0; width:64px; height:64px; display:grid; place-items:center; background:#24282e; border:2px solid #69717c; border-radius:7px; box-shadow:0 5px 13px rgba(0,0,0,.34),inset 0 1px rgba(255,255,255,.05); transition:border-color .16s,box-shadow .16s,transform .16s; }
 .explorer-node:hover .node-face,.explorer-node:focus-visible .node-face,.explorer-node.selected .node-face { transform:translateY(-2px); border-color:var(--node-color); box-shadow:0 8px 18px rgba(0,0,0,.38),0 0 0 3px color-mix(in srgb,var(--node-color) 18%,transparent); }
-.explorer-node.visited .node-face { border-color:color-mix(in srgb,var(--node-color) 70%,#fff); }
+.explorer-node.visited .node-face { border-color:#17c964; box-shadow:0 5px 13px rgba(0,0,0,.34),0 0 0 1px rgba(23,201,100,.12); }
 .explorer-node.disabled { filter:grayscale(1); opacity:.56; }
 .explorer-node.disabled .node-face { background:repeating-linear-gradient(135deg,#24282e,#24282e 7px,#1b1e23 7px,#1b1e23 14px); border-style:dashed; }
 .explorer-node.current .node-face { animation:nodePulse .85s ease-in-out infinite alternate; }
-.node-logo { width:46px; height:46px; display:grid; place-items:center; color:var(--node-color); background:color-mix(in srgb,var(--node-color) 10%,#1b1e23); border-radius:5px; }
+.node-logo { width:46px; height:46px; display:grid; place-items:center; color:var(--node-color); background:color-mix(in srgb,var(--node-color) 7%,#20242a); border-radius:5px; }
 .node-logo svg { width:27px; height:27px; }
+.node-logo .n8n-native-icon { width:28px; height:28px; fill:currentColor; }
 .node-copy { position:absolute; left:-18px; top:69px; width:148px; display:flex; flex-direction:column; gap:2px; pointer-events:none; }
 .node-copy strong { font-size:11px; line-height:1.1; text-shadow:0 1px 3px #000; }
 .node-copy small { color:#a3abb4; font-size:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-shadow:0 1px 2px #000; }
-.node-status { position:absolute; right:-8px; top:-8px; width:20px; height:20px; display:grid; place-items:center; color:#071116; background:#64d8ec; border:2px solid #171a20; border-radius:50%; }
+.node-status { position:absolute; right:-8px; bottom:-8px; width:20px; height:20px; display:grid; place-items:center; color:#fff; background:#17c964; border:2px solid #171a20; border-radius:50%; box-shadow:0 0 0 1px rgba(23,201,100,.2); }
 .node-status:empty { display:none; }
 .node-status svg { width:12px; height:12px; }
 .node-connector { position:absolute; z-index:3; top:28px; width:9px; height:9px; border:2px solid #89919c; border-radius:2px; background:#171a20; }
 .node-connector.input { left:18px; }
 .node-connector.output { right:18px; }
-.kind-webhook { --node-color:#f06b55; }.kind-code { --node-color:#68c7e6; }.kind-condition { --node-color:#f2b34d; }
+.explorer-node.visited .node-connector { border-color:#17c964; }
+.kind-webhook { --node-color:#f06b55; }.kind-code { --node-color:#ff9922; }.kind-condition { --node-color:#35c56d; }
 .kind-postgres { --node-color:#699eca; }.kind-gemini { --node-color:#8d7efa; }.kind-calendar { --node-color:#4285f4; }
 .kind-gmail,.kind-email { --node-color:#ea4335; }.kind-telegram { --node-color:#26a5e4; }.kind-odoo { --node-color:#b97fa8; }.kind-rag { --node-color:#53c8a3; }
 .kind-parser { --node-color:#a98fec; }.kind-execute { --node-color:#ff6d5a; }.kind-manual { --node-color:#8ccf72; }
-.kind-schedule { --node-color:#82bdf0; }.kind-error { --node-color:#e35d6a; }.kind-response { --node-color:#9aa5b1; }
+.kind-schedule { --node-color:#82bdf0; }.kind-error { --node-color:#8f87f7; }.kind-response { --node-color:#9aa5b1; }.kind-http { --node-color:#8f87f7; }
 .kind-merge { --node-color:#d8995c; }.kind-wait { --node-color:#d9bf65; }
 .canvas-help { margin:0; padding:10px 14px; color:#8d97a3; background:#181b21; border-top:1px solid #2b3038; font-size:.65rem; }
 .node-inspector { display:grid; grid-template-columns:auto 1fr 220px; align-items:start; gap:16px; margin-top:14px; padding:18px; border:1px solid var(--line); background:var(--surface); border-radius:14px; }
@@ -381,7 +383,7 @@ select option { background:#0a0f14; }
 .demo-result.success>svg { color:var(--green); }
 .demo-result:not(.success)>svg { color:var(--warning); }
 .demo-running { color:var(--cyan)!important; }
-@keyframes nodePulse { from { box-shadow:0 7px 18px rgba(0,0,0,.3),0 0 0 2px color-mix(in srgb,var(--node-color) 18%,transparent); } to { box-shadow:0 7px 22px rgba(0,0,0,.35),0 0 0 5px color-mix(in srgb,var(--node-color) 25%,transparent); } }
+@keyframes nodePulse { from { box-shadow:0 7px 18px rgba(0,0,0,.3),0 0 0 2px rgba(23,201,100,.16); } to { box-shadow:0 7px 22px rgba(0,0,0,.35),0 0 0 5px rgba(23,201,100,.24); } }
 @keyframes statusPulse { to { box-shadow:0 0 0 5px rgba(97,214,239,.18); } }
 @keyframes shimmer { to { background-position:-200% 0; } }
 @media (max-width:1000px) {

@@ -4,15 +4,17 @@ import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import {
   AlertTriangle,
   Braces,
+  Check,
   CheckCircle2,
+  CircleX,
   CircleStop,
   Clock3,
-  Code2,
   Combine,
   GitBranch,
   Globe2,
   Maximize2,
   Mail,
+  MousePointerClick,
   Play,
   RefreshCcw,
   RotateCcw,
@@ -68,27 +70,40 @@ const brandNodes: Partial<Record<WorkflowNodeKind, SimpleIcon>> = {
 };
 
 const conceptNodes = {
-  manual: Play,
+  manual: MousePointerClick,
   schedule: Clock3,
-  webhook: Webhook,
   execute: Workflow,
-  code: Code2,
   condition: GitBranch,
   rag: Braces,
   parser: Braces,
   merge: Combine,
   wait: RefreshCcw,
-  error: AlertTriangle,
+  error: CircleX,
   response: CircleStop,
   email: Mail,
-  http: Globe2,
 } as const;
 
 function BrandNodeIcon({ icon }: { icon: SimpleIcon }) {
   return <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d={icon.path} /></svg>;
 }
 
+function N8nNativeNodeIcon({ kind }: { kind: "code" | "webhook" | "http" }) {
+  if (kind === "code") {
+    return (
+      <svg className="n8n-native-icon" viewBox="0 0 512 512" aria-hidden="true">
+        <path d="M170.3 48h26.2a12 12 0 0 0 12-12V12a12 12 0 0 0-12-12h-26.2a80 80 0 0 0-80 80v96a56 56 0 0 1-56 56H23a12 12 0 0 0-12 12v24a12 12 0 0 0 12 12h11.3a56 56 0 0 1 56 56v104a72 72 0 0 0 72 72h34.2a12 12 0 0 0 12-12v-24a12 12 0 0 0-12-12h-34.2a24 24 0 0 1-24-24V336c0-27-10.3-51.6-27.1-70a15 15 0 0 1 0-20c16.8-18.4 27.1-43 27.1-70V80a32 32 0 0 1 32-32Zm171.7 0a32 32 0 0 1 33 32v96c0 27 10.2 51.6 27 70a15 15 0 0 1 0 20c-16.8 18.4-27 43-27 70v96a32 32 0 0 1-32 32h-26a12 12 0 0 0-12 12v24a12 12 0 0 0 12 12h26a80 80 0 0 0 80-80v-96a56 56 0 0 1 56-56h11a12 12 0 0 0 12-12v-24a12 12 0 0 0-12-12h-11a56 56 0 0 1-56-56V80a80 80 0 0 0-80-80h-26a12 12 0 0 0-12 12v24a12 12 0 0 0 12 12Z" />
+      </svg>
+    );
+  }
+
+  if (kind === "webhook") return <Webhook aria-hidden="true" />;
+  return <Globe2 aria-hidden="true" />;
+}
+
 function NodeLogo({ kind }: { kind: WorkflowNodeKind }) {
+  if (kind === "code" || kind === "webhook" || kind === "http") {
+    return <N8nNativeNodeIcon kind={kind} />;
+  }
   const brand = brandNodes[kind];
   if (brand) return <BrandNodeIcon icon={brand} />;
   const ConceptIcon = conceptNodes[kind as keyof typeof conceptNodes] ?? Split;
@@ -200,26 +215,25 @@ function WorkflowCanvas({
             ))}
 
             <svg className="workflow-connections" viewBox={`0 0 ${workflow.width} ${workflow.height}`} aria-hidden="true">
-              <defs>
-                <marker id={`arrow-${workflow.id}`} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                  <path d="M 0 0 L 10 5 L 0 10 z" />
-                </marker>
-              </defs>
               {workflow.edges.map((connection) => {
                 const active = visited.has(connection.from) && visited.has(connection.to);
                 const from = workflow.nodes.find((item) => item.id === connection.from);
                 const to = workflow.nodes.find((item) => item.id === connection.to);
                 const aiConnection = /model|tool|parser|embedding|document|splitter/i.test(connection.label ?? "");
+                const edgeLabel = active
+                  ? connection.label
+                    ? `${connection.label} · 1 item`
+                    : "1 item"
+                  : connection.label;
                 return (
                   <g key={`${connection.from}-${connection.to}-${connection.label ?? ""}`} className={`${active ? "active " : ""}${aiConnection ? "ai-connection" : ""}`}>
                     <path
                       className={connection.dashed ? "dashed" : ""}
                       d={edgePath(workflow, connection)}
-                      markerEnd={`url(#arrow-${workflow.id})`}
                     />
-                    {connection.label && from && to && (
+                    {edgeLabel && from && to && (
                       <text x={(from.x + NODE_WIDTH + to.x) / 2} y={(from.y + to.y) / 2 + NODE_HEIGHT / 2 - 8}>
-                        {connection.label}
+                        {edgeLabel}
                       </text>
                     )}
                   </g>
@@ -240,7 +254,7 @@ function WorkflowCanvas({
                 <span className="node-connector input" />
                 <span className="node-face">
                   <span className="node-logo"><NodeLogo kind={item.kind} /></span>
-                  <span className="node-status">{visited.has(item.id) ? <CheckCircle2 /> : null}</span>
+                  <span className="node-status">{visited.has(item.id) ? <Check /> : null}</span>
                 </span>
                 <span className="node-copy"><strong>{item.label}</strong><small>{item.subtitle}{item.disabled ? " · Disabled" : ""}</small></span>
                 <span className="node-connector output" />
