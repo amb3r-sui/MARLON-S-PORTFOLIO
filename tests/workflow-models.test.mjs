@@ -51,6 +51,17 @@ test("the three Inventory canvases match the audited n8n structures", () => {
   assert.ok(inventory.every((workflow) => workflow.initialZoom && workflow.initialZoom < 0.5));
 });
 
+test("the B2B canvas matches the audited n8n structure", () => {
+  const [b2b] = workflowsByProject["b2b-ai-lead-triage"];
+  assert.equal(b2b.nodes.length, 7);
+  assert.equal(b2b.edges.length, 6);
+  assert.equal(b2b.notes?.length, 3);
+  assert.deepEqual(
+    b2b.nodes.map((node) => node.label),
+    ["Run Demo", "Prepare Sample Lead", "Validate Lead", "Gemini Lead Triage", "Prepare Human Review", "Notify Salesperson", "Show Review Result"],
+  );
+});
+
 for (const workflow of workflows) {
   test(`${workflow.id} has a valid visual graph`, () => {
     assert.ok(workflow.nodes.length >= 6, "workflow should show meaningful node detail");
