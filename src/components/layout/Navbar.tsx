@@ -18,7 +18,7 @@ export function Navbar() {
       <nav className="container nav-wrap" aria-label="Primary navigation">
         <Link href="/" className="brand" aria-label="Marlon Magno home">
           <span className="brand-mark">{profile.initials}</span>
-          <span>Marlon Magno</span>
+          <span className="brand-copy"><strong>Marlon Magno</strong><small>Automation systems</small></span>
         </Link>
         <div className="desktop-nav">
           {navigation.map((item) => (

@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   title: { default: "Marlon Magno | AI Automation Specialist", template: "%s | Marlon Magno" },
   description: "Portfolio of Marlon Magno, an AI Automation Specialist building n8n workflows, CRM automations, AI agents, API integrations, and practical business systems.",
   alternates: { canonical: "/" },
-  openGraph: { title: "Marlon Magno | AI Automation Specialist", description: profile.introduction, type: "website", siteName: "Marlon Magno Portfolio", images: [{ url: "/og.png", width: 1739, height: 909, alt: "Marlon Magno AI Automation Specialist portfolio" }] },
-  twitter: { card: "summary_large_image", title: "Marlon Magno | AI Automation Specialist", description: profile.introduction, images: ["/og.png"] },
+  openGraph: { title: "Marlon Magno | AI Automation Specialist", description: profile.introduction, type: "website", siteName: "Marlon Magno Portfolio", images: [{ url: "/og-command-center.png", width: 1734, height: 907, alt: "Marlon Magno automation command center portfolio" }] },
+  twitter: { card: "summary_large_image", title: "Marlon Magno | AI Automation Specialist", description: profile.introduction, images: ["/og-command-center.png"] },
   icons: { icon: "/favicon.svg" },
 };
 
