@@ -1,12 +1,14 @@
-# Marlon Magno — AI Automation Specialist Portfolio
+# Marlon Magno - Automation & Integration Specialist Portfolio
 
-A polished, multi-page portfolio for presenting automation projects to recruiters, clients, agencies, and remote employers. The content is intentionally honest: case studies are labeled as self-initiated portfolio projects or prototypes, expected impact is separated from verified results, and private implementations are not presented as public repositories.
+A polished, multi-page portfolio grounded in Marlon Magno's current CV. It presents automation projects to recruiters, clients, agencies, and remote employers without inventing client metrics, credentials, or production outcomes.
 
 ## Features
 
 - Responsive Home, Projects, Project Case Study, About, Services, and Contact pages
 - Filterable project library powered by structured TypeScript data
-- Three evidence-based n8n case studies selected from a read-only workflow review
+- Four CV-backed project families, including three interactive n8n case studies selected from a read-only workflow review
+- A downloadable source CV plus structured career and education data
+- Original editorial photography generated for the portfolio and stored locally
 - Eleven detailed, n8n-inspired workflow canvases, including the complete seven-workflow, 125-node RANA set, with audited node placement, colored section notes, branch routing, disabled-node states, recognizable node types, zoom controls, and node inspection
 - Safe, browser-only workflow simulations with a visitor guide, editable mock payloads, an n8n-style execution toolbar, animated paths, and success, validation, duplicate, provider-failure, rate-limit, and reset states
 - Light and dark themes with saved preference, system preference, and pre-render initialization
@@ -102,7 +104,7 @@ Place the real PDF at `public/resume/marlon-magno-resume.pdf`. The current downl
 
 ### Social links
 
-Update `linkedIn`, `github`, `onlineJobs`, and `email` once in `src/data/profile.ts`. The footer, contact page, and hero reuse those values. External profiles open in a new tab with `noopener noreferrer`; email uses a `mailto:` link.
+Update `linkedIn`, `github`, and `email` once in `src/data/profile.ts`. The footer, contact page, and hero reuse those values. External profiles open in a new tab with `noopener noreferrer`; email uses a `mailto:` link.
 
 ## Contact form configuration
 

@@ -1,8 +1,7 @@
-import { BriefcaseBusiness, Github, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin, Mail } from "lucide-react";
 import { profile } from "@/data/profile";
 
 const links = [
-  { label: "OnlineJobs.ph profile", href: profile.onlineJobs, icon: BriefcaseBusiness, external: true },
   { label: "LinkedIn profile", href: profile.linkedIn, icon: Linkedin, external: true },
   { label: "GitHub profile", href: profile.github, icon: Github, external: true },
   { label: "Email Marlon Magno", href: `mailto:${profile.email}`, icon: Mail, external: false },
