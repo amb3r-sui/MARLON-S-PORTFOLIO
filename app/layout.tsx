@@ -7,11 +7,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(profile.siteUrl),
-  title: { default: "Marlon Magno | AI Automation Specialist", template: "%s | Marlon Magno" },
-  description: "Portfolio of Marlon Magno, an AI Automation Specialist building n8n workflows, CRM automations, AI agents, API integrations, and practical business systems.",
+  title: { default: "Marlon Magno | Automation & Integration Specialist", template: "%s | Marlon Magno" },
+  description: "Portfolio of Marlon Magno, an Automation & Integration Specialist building secure n8n workflows, AI automations, and connected business systems.",
   alternates: { canonical: "/" },
-  openGraph: { title: "Marlon Magno | AI Automation Specialist", description: profile.introduction, type: "website", siteName: "Marlon Magno Portfolio", images: [{ url: "/og-operations-lab.png", width: 1731, height: 909, alt: "Marlon Magno automation operations lab portfolio" }] },
-  twitter: { card: "summary_large_image", title: "Marlon Magno | AI Automation Specialist", description: profile.introduction, images: ["/og-operations-lab.png"] },
+  openGraph: { title: "Marlon Magno | Automation & Integration Specialist", description: profile.introduction, type: "website", siteName: "Marlon Magno Portfolio", images: [{ url: "/og-operations-lab.png", width: 1731, height: 909, alt: "Marlon Magno automation and integration portfolio" }] },
+  twitter: { card: "summary_large_image", title: "Marlon Magno | Automation & Integration Specialist", description: profile.introduction, images: ["/og-operations-lab.png"] },
   icons: { icon: "/favicon.svg" },
 };
 

@@ -22,6 +22,7 @@ const pages = [
   ["/projects/rana-ai-receptionist-system", "RANA AI Receptionist"],
   ["/projects/inventory-rfq-automation", "Inventory Replenishment"],
   ["/projects/b2b-ai-lead-triage", "B2B AI Lead Triage"],
+  ["/projects/crm-data-operations", "CRM and Data Operations"],
 ];
 
 for (const [path, expected] of pages) {
@@ -103,4 +104,18 @@ test("real profile links are rendered safely", async () => {
   assert.match(html, /marlonmagno322%40gmail\.com|marlonmagno322@gmail\.com/);
   assert.match(html, /target="_blank"/);
   assert.match(html, /noopener noreferrer/);
+});
+
+test("resume-backed content is published without invented claims", async () => {
+  const about = await render("/about");
+  const aboutHtml = await about.text();
+  assert.match(aboutHtml, /Automation &amp; Integration Specialist|Automation & Integration Specialist/);
+  assert.match(aboutHtml, /Polytechnic University of the Philippines/i);
+
+  const project = await render("/projects/crm-data-operations");
+  const projectHtml = await project.text();
+  assert.match(projectHtml, /Zoho CRM/i);
+  assert.match(projectHtml, /Airtable/i);
+  assert.match(projectHtml, /PostgreSQL/i);
+  assert.doesNotMatch(projectHtml, /revenue increased|percent improvement|guaranteed results/i);
 });
