@@ -11,7 +11,7 @@ A polished, multi-page portfolio grounded in Marlon Magno's current CV. It prese
 - Three original editorial images generated for the portfolio and stored locally as compressed WebP assets
 - Eleven detailed, n8n-inspired workflow canvases, including the complete seven-workflow, 125-node RANA set, with audited node placement, colored section notes, branch routing, disabled-node states, recognizable node types, zoom controls, and node inspection
 - Safe, browser-only workflow simulations with a visitor guide, editable mock payloads, an n8n-style execution toolbar, animated paths, and success, validation, duplicate, provider-failure, rate-limit, and reset states
-- Light and dark themes with saved preference, system preference, and pre-render initialization
+- System, light, and dark themes with saved preference and pre-render initialization
 - Monochrome Simple Icons brand marks plus Phosphor concept icons for non-brand technologies
 - Reusable workflow diagrams, project cards, service accordions, fallbacks, and calls to action
 - Accessible mobile navigation, visible focus states, semantic structure, reduced-motion support, and labeled form validation
@@ -19,11 +19,11 @@ A polished, multi-page portfolio grounded in Marlon Magno's current CV. It prese
 - Graceful resume and project-image fallbacks
 - Page-specific canonical URLs, Open Graph and Twitter metadata, JSON-LD, sitemap, robots rules, custom 404, loading, and error states
 - Static export for Vercel plus Cloudflare Sites-compatible worker output
-- Automated visual-contract checks that reject gradients, Lucide regressions, and em/en dashes in product UI source
+- Automated Bryl visual-contract checks for the neutral palette, local Geist roles, restrained halftone texture, fixed sidebar, and icon consistency
 
 ## Technology stack
 
-Next.js App Router, React, strict TypeScript, native CSS tokens through Tailwind CSS, Phosphor Icons, Simple Icons, Motion, vinext, and Cloudflare Workers tooling.
+Next.js App Router, React, strict TypeScript, native CSS tokens through Tailwind CSS, locally bundled Geist/Geist Mono/Geist Pixel Square, Phosphor Icons, Simple Icons, Motion, vinext, and Cloudflare Workers tooling.
 
 ## Important folders
 
@@ -36,6 +36,9 @@ src/types/                   Shared TypeScript interfaces
 public/images/editorial/     Original generated portfolio imagery
 public/resume/               Public resume PDF
 .openai/hosting.json         Sites deployment metadata
+DESIGN.md                    Canonical Bryl-derived visual system
+design-contract.md           Reference boundaries and quality gate
+implementation-handoff.md    Maintainer implementation rules
 docs/workflow-review.md      Sanitized workflow inventory and selection rationale
 ```
 
@@ -61,7 +64,9 @@ pnpm check
 
 ## Design system
 
-The interface uses one warm monochrome surface system across light and dark themes, 1px borders, restrained 6-12px radii, a single muted blue accent, fast system-native typography, and small purposeful transitions. There are no gradients, neon effects, glass cards, oversized pills, or decorative dashboards. Motion is limited to hierarchy and feedback and is disabled when the visitor prefers reduced motion.
+The interface adapts the [Bryl minimal design language](https://github.com/bryllim/bryl-minimal-design) into Marlon's own monochrome technical editorial system. It uses locally bundled Geist roles, a fixed `14rem` desktop rail, narrow reading measures, numbered pixel labels, one-pixel hairlines, a `16/12/8/6` radius ladder, and sparse CSS halftone fields. There is no accent hue, chromatic gradient, neon effect, glass card, oversized pill, or decorative dashboard. Motion is limited to hierarchy and feedback and is disabled when the visitor prefers reduced motion.
+
+The site reuses the reference's published design grammar under its MIT/Open Font licenses; it does not copy Bryl branding, biography, page copy, assets, or literal page composition. See [`DESIGN.md`](DESIGN.md) and [`design-contract.md`](design-contract.md) for the binding implementation rules and reference boundaries.
 
 ## Workflow case studies and demos
 
@@ -75,7 +80,7 @@ These explorers are original UI simulations, not imported n8n JSON and not a cop
 
 ## Theme system
 
-The root layout reads `portfolio-theme` from `localStorage` before the page paints. If no saved value exists, it follows `prefers-color-scheme`; dark is the safe fallback. The navigation toggle updates the document theme and persists the choice. CSS custom properties drive both palettes, and reduced-motion preferences remain respected.
+The root layout reads `portfolio-theme` from `localStorage` before the page paints. The navigation control cycles through `System`, `Light`, and `Dark`; system mode follows `prefers-color-scheme` and updates if the OS preference changes. CSS custom properties drive both palettes, the selected preference persists, and reduced-motion preferences remain respected.
 
 ## Tool logos
 

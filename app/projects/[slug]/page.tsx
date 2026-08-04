@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 function CaseSection({ title, intro, children }: { title: string; intro?: string; children: React.ReactNode }) {
-  return <section className="case-section"><h2>{title}</h2>{intro && <p className="case-intro">{intro}</p>}{children}</section>;
+  return <section className="case-section"><span className="case-section-label">{title}</span><h2>{title}</h2>{intro && <p className="case-intro">{intro}</p>}{children}</section>;
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {

@@ -48,6 +48,7 @@ export default function Home() {
         <ScrollReveal className="container">
           <div className="section-top">
             <SectionHeading
+              eyebrow="Selected projects"
               title="Systems with visible safeguards"
               description="Explore the business problem, workflow logic, safe sample run, failure paths, and current project scope."
             />
@@ -75,7 +76,7 @@ export default function Home() {
             />
           </figure>
           <div className="method-copy">
-            <SectionHeading title="Reliability is designed in" description="The best automation is understandable before it is impressive." />
+            <SectionHeading eyebrow="Method" title="Reliability is designed in" description="The best automation is understandable before it is impressive." />
             <div className="principle-list">
               {principles.map(([title, copy]) => (
                 <article key={title}>
@@ -91,6 +92,7 @@ export default function Home() {
       <section className="section">
         <ScrollReveal className="container">
           <SectionHeading
+            eyebrow="Services"
             title="Automation across the operating stack"
             description="Focused help for workflow orchestration, AI-assisted decisions, CRM operations, APIs, and data quality."
           />
@@ -115,6 +117,7 @@ export default function Home() {
       <section className="tech-section">
         <ScrollReveal className="container">
           <SectionHeading
+            eyebrow="Toolkit"
             title="Tools selected around the process"
             description="The stack spans automation, AI, data, CRM, development, and deployment. Logos identify technologies only."
           />
@@ -125,7 +128,7 @@ export default function Home() {
       <section className="section experience-section">
         <ScrollReveal className="container experience-layout">
           <div>
-            <SectionHeading title="Hands-on work since 2024" description={career.summary} />
+            <SectionHeading eyebrow="Experience" title="Hands-on work since 2024" description={career.summary} />
             <Link href="/about" className="text-link">Read the full background <ArrowRight size={18} /></Link>
           </div>
           <div className="experience-notes">

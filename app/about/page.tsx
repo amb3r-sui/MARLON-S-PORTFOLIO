@@ -47,7 +47,7 @@ export default function AboutPage() {
 
       <section className="section">
         <div className="container approach-layout">
-          <SectionHeading title="How I approach the work" description="Clear logic over unnecessary complexity. Verified data over confident guesses." />
+          <SectionHeading eyebrow="Approach" title="How I approach the work" description="Clear logic over unnecessary complexity. Verified data over confident guesses." />
           <div className="check-list">
             {approach.map((item) => <div key={item}><Check weight="bold" />{item}</div>)}
           </div>
@@ -72,7 +72,7 @@ export default function AboutPage() {
 
       <section className="section">
         <div className="container">
-          <SectionHeading title="Technical coverage" description="Skills span the full automation lifecycle, from discovery and API contracts to deployment and recovery paths." />
+          <SectionHeading eyebrow="Skills" title="Technical coverage" description="Skills span the full automation lifecycle, from discovery and API contracts to deployment and recovery paths." />
           <div className="skills-grid">
             {skillGroups.map((group) => (
               <article className="skill-card" key={group.title}>
@@ -87,7 +87,7 @@ export default function AboutPage() {
 
       <section className="section section-muted">
         <div className="container building-layout">
-          <SectionHeading title="Systems I am building" description="Portfolio projects are grounded in practical operating problems and clearly labeled as self-directed work." />
+          <SectionHeading eyebrow="Current work" title="Systems I am building" description="Portfolio projects are grounded in practical operating problems and clearly labeled as self-directed work." />
           <div className="building-grid">{building.map((item) => <div key={item}>{item}</div>)}</div>
         </div>
       </section>
