@@ -10,7 +10,7 @@ export function ProjectCard({ project }: { project: Project }) {
   const image = project.screenshots[0];
 
   return (
-    <Link href={`/projects/${project.slug}`} className="project-card-shell" aria-label={`Explore ${project.title}`}>
+    <Link href={`/projects/${project.slug}`} className="project-card-shell">
       <article className="project-card">
         <div className="project-visual">
           <Image src={image.src} alt={image.alt} fill unoptimized sizes="(max-width: 760px) 100vw, 42vw" />

@@ -4,7 +4,7 @@ import { ArrowRight, CheckCircle } from "@phosphor-icons/react/dist/ssr";
 import { CTA } from "@/components/ui/CTA";
 import { services } from "@/data/services";
 
-export const metadata: Metadata = { title: "Services", description: "Workflow automation, AI, CRM, API integration, data quality, testing, and documentation services." };
+export const metadata: Metadata = { title: "Services", description: "Workflow automation, AI, CRM, API integration, data quality, testing, and documentation services.", alternates: { canonical: "/services" } };
 
 export default function ServicesPage() {
   return (

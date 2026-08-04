@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import {
   Warning as AlertTriangle,
   BracketsCurly as Braces,
@@ -301,6 +302,7 @@ function WorkflowCanvas({
 }
 
 export function WorkflowDemo({ project }: { project: Project }) {
+  const reduceMotion = useReducedMotion();
   const workflows = useMemo(() => workflowsByProject[project.slug] ?? [], [project.slug]);
   const [workflowId, setWorkflowId] = useState(workflows[0]?.id ?? "");
   const workflow = useMemo(
@@ -461,7 +463,7 @@ export function WorkflowDemo({ project }: { project: Project }) {
           <h3 id="demo-output-title">What a client would receive</h3>
           {state === "idle" && <p>Choose a scenario and run the sample to animate the corresponding branch through this workflow.</p>}
           {state === "running" && <p className="demo-running">Processing fictional sample data…</p>}
-          {finished && <><div className={`demo-result ${state}`} data-testid="demo-result">{state === "success" ? <CheckCircle2 weight="fill" /> : <AlertTriangle weight="fill" />}<div><strong>{businessOutcome}</strong><p>{output}</p></div></div><div className="outcome-card-grid"><div><small>Final route</small><strong>{routeEnd}</strong></div><div><small>Safeguard demonstrated</small><strong>{safeguardCopy[finalOutcome]}</strong></div><div><small>External systems</small><strong>Simulated, none contacted</strong></div><div><small>Selected path</small><strong>{activePath.length} documented nodes</strong></div></div></>}
+          {finished && <><motion.div className={`demo-result ${state}`} data-testid="demo-result" initial={reduceMotion ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.24 }}>{state === "success" ? <CheckCircle2 weight="fill" /> : <AlertTriangle weight="fill" />}<div><strong>{businessOutcome}</strong><p>{output}</p></div></motion.div><div className="outcome-card-grid"><div><small>Final route</small><strong>{routeEnd}</strong></div><div><small>Safeguard demonstrated</small><strong>{safeguardCopy[finalOutcome]}</strong></div><div><small>External systems</small><strong>Simulated, none contacted</strong></div><div><small>Selected path</small><strong>{activePath.length} documented nodes</strong></div></div></>}
           <small>Every provider action, message, database record, booking, RFQ, and notification shown here is simulated.</small>
         </section>
       </div>

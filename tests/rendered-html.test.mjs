@@ -43,8 +43,19 @@ test("production metadata replaces the starter preview", async () => {
   const response = await render();
   const html = await response.text();
   assert.match(html, /Marlon Magno/);
-  assert.match(html, /og-operations-lab\.png/);
+  assert.match(html, /og-portfolio\.png/);
+  assert.match(html, /application\/ld\+json/);
+  assert.match(html, /schema\.org/);
+  assert.match(html, /Automation Specialist|Automation &amp; Integration Specialist/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/i);
+});
+
+test("each primary page publishes its own canonical URL", async () => {
+  for (const path of ["/about", "/projects", "/services", "/contact"]) {
+    const response = await render(path);
+    const html = await response.text();
+    assert.match(html, new RegExp(`<link rel="canonical" href="http://localhost:3000${path}"`));
+  }
 });
 
 test("homepage leads into real projects instead of a generic dashboard", async () => {

@@ -8,11 +8,11 @@ export function Footer() {
     <footer className="footer">
       <div className="container footer-grid">
         <div className="footer-intro">
-          <Link href="/" className="brand"><span className="brand-mark">{profile.initials}</span><span>{profile.name}</span></Link>
+          <Link href="/" className="brand" prefetch={false}><span className="brand-mark">{profile.initials}</span><span>{profile.name}</span></Link>
           <p>{profile.title} building secure, reviewable business workflows.</p>
         </div>
         <nav className="footer-links" aria-label="Footer navigation">
-          {navigation.map((item) => <Link key={item.href} href={item.href}>{item.label}</Link>)}
+          {navigation.map((item) => <Link key={item.href} href={item.href} prefetch={false}>{item.label}</Link>)}
         </nav>
         <div className="footer-connect">
           <SocialLinks labels />
