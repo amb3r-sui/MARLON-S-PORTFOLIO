@@ -51,3 +51,24 @@ test("the static export includes crawler files", async () => {
   assert.match(robots, /^User-agent: \*$/m);
   assert.match(robots, /^Sitemap: .*\/sitemap\.xml$/m);
 });
+
+test("Vercel serves the Vinext static export with clean routes", async () => {
+  const config = JSON.parse(await readFile(path.join(root, "vercel.json"), "utf8"));
+
+  assert.equal(config.framework, null);
+  assert.equal(config.buildCommand, "pnpm build");
+  assert.equal(config.outputDirectory, "dist/client");
+  assert.equal(config.cleanUrls, true);
+
+  for (const route of [
+    "index.html",
+    "about.html",
+    "contact.html",
+    "projects.html",
+    "services.html",
+    "projects/rana-ai-receptionist-system.html",
+  ]) {
+    const details = await stat(path.join(root, "dist/client", route));
+    assert.ok(details.isFile(), `${route} should exist in the Vercel output directory`);
+  }
+});
