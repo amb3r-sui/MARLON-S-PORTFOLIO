@@ -7,20 +7,21 @@ export function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-grid">
-        <div>
+        <div className="footer-intro">
           <Link href="/" className="brand"><span className="brand-mark">{profile.initials}</span><span>{profile.name}</span></Link>
-          <p>Building practical automation systems for modern businesses.</p>
+          <p>{profile.title} building secure, reviewable business workflows.</p>
         </div>
-        <div>
-          <span className="eyebrow">Navigate</span>
-          <div className="footer-links">{navigation.map((item) => <Link key={item.href} href={item.href}>{item.label}</Link>)}</div>
-        </div>
-        <div>
-          <span className="eyebrow">Connect</span>
-          <SocialLinks />
+        <nav className="footer-links" aria-label="Footer navigation">
+          {navigation.map((item) => <Link key={item.href} href={item.href}>{item.label}</Link>)}
+        </nav>
+        <div className="footer-connect">
+          <SocialLinks labels />
         </div>
       </div>
-      <div className="container footer-bottom">© {new Date().getFullYear()} {profile.name}. {profile.title}.</div>
+      <div className="container footer-bottom">
+        <span>© {new Date().getFullYear()} {profile.name}</span>
+        <span>{profile.location}</span>
+      </div>
     </footer>
   );
 }

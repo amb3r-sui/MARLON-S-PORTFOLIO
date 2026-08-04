@@ -2,29 +2,29 @@
 
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import {
-  AlertTriangle,
-  Braces,
+  Warning as AlertTriangle,
+  BracketsCurly as Braces,
   Check,
-  CheckCircle2,
-  CircleX,
-  CircleStop,
-  Clock3,
-  Combine,
+  CheckCircle as CheckCircle2,
+  XCircle as CircleX,
+  StopCircle as CircleStop,
+  Clock as Clock3,
+  Intersect as Combine,
   GitBranch,
-  Globe2,
-  Maximize2,
-  Mail,
-  MousePointerClick,
+  Globe as Globe2,
+  ArrowsOut as Maximize2,
+  EnvelopeSimple as Mail,
+  Mouse as MousePointerClick,
   Play,
-  RefreshCcw,
-  RotateCcw,
+  ArrowClockwise as RefreshCcw,
+  ArrowCounterClockwise as RotateCcw,
   ShieldCheck,
-  Split,
-  Webhook,
-  Workflow,
-  ZoomIn,
-  ZoomOut,
-} from "lucide-react";
+  GitFork as Split,
+  WebhooksLogo as Webhook,
+  FlowArrow as Workflow,
+  MagnifyingGlassPlus as ZoomIn,
+  MagnifyingGlassMinus as ZoomOut,
+} from "@phosphor-icons/react";
 import {
   siGmail,
   siGooglecalendar,
@@ -128,8 +128,8 @@ function N8nNativeNodeIcon({ kind }: { kind: "code" | "webhook" | "http" }) {
     );
   }
 
-  if (kind === "webhook") return <Webhook aria-hidden="true" />;
-  return <Globe2 aria-hidden="true" />;
+  if (kind === "webhook") return <Webhook aria-hidden="true" weight="bold" />;
+  return <Globe2 aria-hidden="true" weight="bold" />;
 }
 
 function NodeLogo({ kind }: { kind: WorkflowNodeKind }) {
@@ -139,7 +139,7 @@ function NodeLogo({ kind }: { kind: WorkflowNodeKind }) {
   const brand = brandNodes[kind];
   if (brand) return <BrandNodeIcon icon={brand} />;
   const ConceptIcon = conceptNodes[kind as keyof typeof conceptNodes] ?? Split;
-  return <ConceptIcon aria-hidden="true" />;
+  return <ConceptIcon aria-hidden="true" weight="bold" />;
 }
 
 function edgePath(
@@ -254,7 +254,7 @@ function WorkflowCanvas({
                 const aiConnection = /model|tool|parser|embedding|document|splitter/i.test(connection.label ?? "");
                 const edgeLabel = active
                   ? connection.label
-                    ? `${connection.label} · 1 item`
+                    ? `${connection.label} - 1 item`
                     : "1 item"
                   : connection.label;
                 return (
@@ -288,7 +288,7 @@ function WorkflowCanvas({
                   <span className="node-logo"><NodeLogo kind={item.kind} /></span>
                   <span className="node-status">{visited.has(item.id) ? <Check /> : null}</span>
                 </span>
-                <span className="node-copy"><strong>{item.label}</strong><small>{item.subtitle}{item.disabled ? " · Disabled" : ""}</small></span>
+                <span className="node-copy"><strong>{item.label}</strong><small>{item.subtitle}{item.disabled ? " - Disabled" : ""}</small></span>
                 <span className="node-connector output" />
               </button>
             ))}
@@ -405,7 +405,7 @@ export function WorkflowDemo({ project }: { project: Project }) {
 
       <section className="demo-guide" aria-labelledby="demo-guide-title">
         <div>
-          <span className="eyebrow">Visitor guide</span>
+          <span className="detail-label">Visitor guide</span>
           <h3 id="demo-guide-title">Try the automation in three steps</h3>
           <p>This is a safe portfolio sandbox. Nothing entered here is sent to n8n or any outside service.</p>
         </div>
@@ -435,7 +435,7 @@ export function WorkflowDemo({ project }: { project: Project }) {
       <section className="mock-workbench outcome-first" aria-labelledby="mock-workbench-title">
         <div className="mock-form">
           <div className="mock-heading">
-            <div><span className="eyebrow">Mock execution</span><h3 id="mock-workbench-title">Configure sample input</h3></div>
+            <div><span className="detail-label">Mock execution</span><h3 id="mock-workbench-title">Configure sample input</h3></div>
             <span className="safe-data-badge"><ShieldCheck /> Fictional data only</span>
           </div>
           <label>Test scenario<select value={scenarioId} onChange={(event) => chooseScenario(event.target.value)} data-testid="demo-scenario">{project.demoScenarios.map((item) => <option key={item.id} value={item.id}>{item.title}</option>)}</select></label>
@@ -447,7 +447,7 @@ export function WorkflowDemo({ project }: { project: Project }) {
 
       <div className="demo-layout execution-layout">
         <section className="demo-panel" aria-labelledby="demo-progress-title">
-          <span className="eyebrow">Readable execution path</span>
+          <span className="detail-label">Readable execution path</span>
           <h3 id="demo-progress-title">What the automation is doing</h3>
           <ol className="demo-progress">{activePath.map((nodeId, index) => {
             const item = workflow.nodes.find((candidate) => candidate.id === nodeId);
@@ -457,11 +457,11 @@ export function WorkflowDemo({ project }: { project: Project }) {
         </section>
 
         <section className="demo-panel demo-output" aria-labelledby="demo-output-title" aria-live="polite">
-          <span className="eyebrow">Business result</span>
+          <span className="detail-label">Business result</span>
           <h3 id="demo-output-title">What a client would receive</h3>
           {state === "idle" && <p>Choose a scenario and run the sample to animate the corresponding branch through this workflow.</p>}
           {state === "running" && <p className="demo-running">Processing fictional sample data…</p>}
-          {finished && <><div className={`demo-result ${state}`} data-testid="demo-result">{state === "success" ? <CheckCircle2 /> : <AlertTriangle />}<div><strong>{businessOutcome}</strong><p>{output}</p></div></div><div className="outcome-card-grid"><div><small>Final route</small><strong>{routeEnd}</strong></div><div><small>Safeguard demonstrated</small><strong>{safeguardCopy[finalOutcome]}</strong></div><div><small>External systems</small><strong>Simulated — none contacted</strong></div><div><small>Selected path</small><strong>{activePath.length} documented nodes</strong></div></div></>}
+          {finished && <><div className={`demo-result ${state}`} data-testid="demo-result">{state === "success" ? <CheckCircle2 weight="fill" /> : <AlertTriangle weight="fill" />}<div><strong>{businessOutcome}</strong><p>{output}</p></div></div><div className="outcome-card-grid"><div><small>Final route</small><strong>{routeEnd}</strong></div><div><small>Safeguard demonstrated</small><strong>{safeguardCopy[finalOutcome]}</strong></div><div><small>External systems</small><strong>Simulated, none contacted</strong></div><div><small>Selected path</small><strong>{activePath.length} documented nodes</strong></div></div></>}
           <small>Every provider action, message, database record, booking, RFQ, and notification shown here is simulated.</small>
         </section>
       </div>
@@ -472,14 +472,14 @@ export function WorkflowDemo({ project }: { project: Project }) {
           <div><ShieldCheck /><span><strong>What is this payload?</strong><p>This fictional input object shows how customer or business data is structured before validation and workflow processing. It stays in your browser and is never sent to n8n, an API, or a production system.</p></span></div>
           <dl><div><dt>Purpose</dt><dd>Technical input inspection</dd></div><div><dt>Storage</dt><dd>Browser memory only</dd></div><div><dt>Connected systems</dt><dd>None</dd></div></dl>
         </div>
-        <div className="mock-payload" aria-label="Mock payload preview"><div><span /><span /><span /><strong>INPUT · JSON</strong></div><pre>{mockPayload}</pre><small>Browser memory only · cleared when you refresh</small></div>
+        <div className="mock-payload" aria-label="Mock payload preview"><div><strong>Input JSON</strong></div><pre>{mockPayload}</pre><small>Browser memory only. Cleared when you refresh.</small></div>
       </details>
 
       <details className="full-workflow-details">
-        <summary><Workflow /> Inspect the full n8n-style workflow <span>{workflow.nodes.length} nodes · {workflow.edges.length} connections</span></summary>
-        <div className="workflow-summary"><div><span className="eyebrow">Selected workflow</span><h3>{workflow.name}</h3><p>{workflow.summary}</p></div><div><small>Trigger</small><strong>{workflow.trigger}</strong><small>Visible structure</small><strong>{workflow.nodes.length} nodes · {workflow.edges.length} connections</strong></div></div>
+        <summary><Workflow weight="bold" /> Inspect the full n8n-style workflow <span>{workflow.nodes.length} nodes, {workflow.edges.length} connections</span></summary>
+        <div className="workflow-summary"><div><span className="detail-label">Selected workflow</span><h3>{workflow.name}</h3><p>{workflow.summary}</p></div><div><small>Trigger</small><strong>{workflow.trigger}</strong><small>Visible structure</small><strong>{workflow.nodes.length} nodes, {workflow.edges.length} connections</strong></div></div>
         <WorkflowCanvas key={workflow.id} workflow={workflow} activePath={activePath} activeIndex={activeStep} state={state} selectedNode={selectedNode} onSelectNode={(item) => setSelectedNode(item.id)} onExecute={runDemo} onReset={resetDemo} />
-        {inspectedNode && <div className="node-inspector" data-testid="node-inspector"><span className={`node-logo kind-${inspectedNode.kind}`}><NodeLogo kind={inspectedNode.kind} /></span><div><span className="eyebrow">Node inspector</span><h3>{inspectedNode.label}</h3><p>{inspectedNode.details}</p></div><dl><div><dt>Node type</dt><dd>{inspectedNode.subtitle}</dd></div><div><dt>Mode</dt><dd>Sanitized simulation</dd></div></dl></div>}
+        {inspectedNode && <div className="node-inspector" data-testid="node-inspector"><span className={`node-logo kind-${inspectedNode.kind}`}><NodeLogo kind={inspectedNode.kind} /></span><div><span className="detail-label">Node inspector</span><h3>{inspectedNode.label}</h3><p>{inspectedNode.details}</p></div><dl><div><dt>Node type</dt><dd>{inspectedNode.subtitle}</dd></div><div><dt>Mode</dt><dd>Sanitized simulation</dd></div></dl></div>}
       </details>
     </div>
   );

@@ -30,8 +30,8 @@ const paths = (
 
 const ranaGateway: WorkflowExplorerDefinition = {
   id: "rana-00",
-  shortName: "00 · Gateway",
-  name: "Rana 00 — AI Gateway and Abuse Protection",
+  shortName: "Gateway",
+  name: "Rana 00 - AI Gateway and Abuse Protection",
   summary: "The complete pre-AI gateway: request authentication, payload validation, privacy-safe identity, duplicate/cache/rate/budget inspection, deterministic abuse scoring, six decision branches, and hourly cleanup.",
   trigger: "Customer channel POST + hourly cleanup",
   width: 2250,
@@ -49,7 +49,7 @@ const ranaGateway: WorkflowExplorerDefinition = {
     node("decide", "Decide Gateway Action", "condition", 1225, 80, "IF", "Chooses allow, cached response, CAPTCHA, human review, throttle, or temporary block."),
     node("budget", "Check Budget Warning Threshold", "condition", 1395, 10, "IF", "Checks whether configured usage is nearing a warning threshold."),
     node("budgetnotify", "Notify Administrators of Budget Warning", "execute", 1565, 10, "Execute workflow", "Routes a sanitized budget warning into the escalation workflow."),
-    node("route", "Route Gateway Decision", "condition", 1395, 155, "Switch · rules", "Sends the request into exactly one allowed outcome branch."),
+    node("route", "Route Gateway Decision", "condition", 1395, 155, "Switch rules", "Sends the request into exactly one allowed outcome branch."),
     node("recordallow", "Record Allowed Request and Sliding Windows", "postgres", 1565, 105, "PostgreSQL", "Records allowed-request counters and rolling windows."),
     node("restore", "Restore Authorized Gateway Context", "code", 1735, 105, "Edit fields", "Restores only the authorized context required by the private intake workflow."),
     node("callintake", "Call Customer Inquiry Intake", "execute", 1905, 105, "Execute workflow", "Calls Rana 01 with an explicit allow-AI context."),
@@ -86,8 +86,8 @@ const ranaGateway: WorkflowExplorerDefinition = {
 
 const ranaIntake: WorkflowExplorerDefinition = {
   id: "rana-01",
-  shortName: "01 · Intake",
-  name: "Rana 01 — Customer Inquiry Intake",
+  shortName: "Intake",
+  name: "Rana 01 - Customer Inquiry Intake",
   summary: "The complete gateway-approved intake path: input validation, identity normalization, duplicate routing, idempotent customer/message persistence, authorized context restoration, AI-brain call, and safe response.",
   trigger: "Authorized execute-workflow call",
   width: 1700,
@@ -119,8 +119,8 @@ const ranaIntake: WorkflowExplorerDefinition = {
 
 const ranaBrain: WorkflowExplorerDefinition = {
   id: "rana-02",
-  shortName: "02 · AI Brain",
-  name: "Rana 02 — AI Receptionist Brain",
+  shortName: "AI Brain",
+  name: "Rana 02 - AI Receptionist Brain",
   summary: "The full receptionist brain: authorized input, settings/customer/history context, Gemini agent with RAG tool and structured parser, validated booking/escalation routing, caching, conversation persistence, and compact usage logging.",
   trigger: "Structured inquiry from Rana 01",
   width: 2360,
@@ -168,8 +168,8 @@ const ranaBrain: WorkflowExplorerDefinition = {
 
 const ranaCalendar: WorkflowExplorerDefinition = {
   id: "rana-03",
-  shortName: "03 · Calendar",
-  name: "Rana 03 — Appointment and Calendar Manager",
+  shortName: "Calendar",
+  name: "Rana 03 - Appointment and Calendar Manager",
   summary: "The complete appointment boundary: validated action routing, service catalog and branch rules, database and Calendar conflict checks, creation, reschedule/cancel mutation paths, CRM reminder queuing, and a structured result.",
   trigger: "Validated booking intent",
   width: 2250,
@@ -218,8 +218,8 @@ const ranaCalendar: WorkflowExplorerDefinition = {
 
 const ranaFollowup: WorkflowExplorerDefinition = {
   id: "rana-04",
-  shortName: "04 · Follow-Up",
-  name: "Rana 04 — CRM Reminders and Follow-Up",
+  shortName: "Follow-Up",
+  name: "Rana 04 - CRM Reminders and Follow-Up",
   summary: "The complete CRM and reminder system: queue actions, scheduled dispatch, customer and appointment counters, consent enforcement, SMTP/mock/suppressed delivery branches, sent-state updates, review requests, and auditing.",
   trigger: "Private CRM action + scheduled dispatcher",
   width: 2300,
@@ -267,8 +267,8 @@ const ranaFollowup: WorkflowExplorerDefinition = {
 
 const ranaEscalation: WorkflowExplorerDefinition = {
   id: "rana-05",
-  shortName: "05 · Escalation",
-  name: "Rana 05 — Escalation Logging and Errors",
+  shortName: "Escalation",
+  name: "Rana 05 - Escalation Logging and Errors",
   summary: "The complete operations workflow: human escalation, workflow error, and daily-summary triggers; sanitization and persistence; Telegram and SMTP staff notifications; and daily operational aggregation.",
   trigger: "Human escalation + error trigger + daily schedule",
   width: 1700,
@@ -303,8 +303,8 @@ const ranaEscalation: WorkflowExplorerDefinition = {
 
 const ranaRag: WorkflowExplorerDefinition = {
   id: "rana-06",
-  shortName: "06 · RAG",
-  name: "Rana 06 — RAG Knowledge Ingestion and Retrieval",
+  shortName: "RAG",
+  name: "Rana 06 - RAG Knowledge Ingestion and Retrieval",
   summary: "The complete controlled RAG system: sanitized retrieval with active/effective-source enforcement plus approved-document cleanup, checksum duplicate control, version replacement, document loading, chunking, Gemini embeddings, vector storage, expiry, and audit statistics.",
   trigger: "Retrieval tool call or approved ingestion request",
   width: 2100,
@@ -469,7 +469,7 @@ const inventoryErrors: WorkflowExplorerDefinition = {
 const b2bTriage: WorkflowExplorerDefinition = {
   id: "b2b-triage",
   shortName: "Lead Triage",
-  name: "B2B AI Lead Triage — Human Review Demo",
+  name: "B2B AI Lead Triage - Human Review Demo",
   summary: "Matches the visible demo canvas: prepare and validate a fictional lead, ask Gemini for triage, then branch the human-review result to an internal notice and a displayed result.",
   trigger: "Manual demo trigger",
   width: 2660,

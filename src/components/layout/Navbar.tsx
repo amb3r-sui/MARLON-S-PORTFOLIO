@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { List, X } from "@phosphor-icons/react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { navigation } from "@/data/navigation";
@@ -18,8 +18,9 @@ export function Navbar() {
       <nav className="container nav-wrap" aria-label="Primary navigation">
         <Link href="/" className="brand" aria-label="Marlon Magno home">
           <span className="brand-mark">{profile.initials}</span>
-          <span className="brand-copy"><strong>Marlon Magno</strong><small>Automation systems</small></span>
+          <span className="brand-copy"><strong>{profile.name}</strong><small>Automation & Integration</small></span>
         </Link>
+
         <div className="desktop-nav">
           {navigation.map((item) => (
             <Link key={item.href} href={item.href} className={pathname === item.href ? "active" : ""}>
@@ -29,9 +30,11 @@ export function Navbar() {
           <ThemeToggle />
           <ResumeButton compact />
         </div>
+
         <button className="menu-button" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="mobile-menu" aria-label={open ? "Close menu" : "Open menu"}>
-          {open ? <X /> : <Menu />}
+          {open ? <X size={22} /> : <List size={22} />}
         </button>
+
         {open && (
           <div className="mobile-nav" id="mobile-menu">
             {navigation.map((item) => (
@@ -39,8 +42,7 @@ export function Navbar() {
                 {item.label}
               </Link>
             ))}
-            <ThemeToggle />
-            <ResumeButton />
+            <div className="mobile-nav-actions"><ThemeToggle /><ResumeButton /></div>
           </div>
         )}
       </nav>

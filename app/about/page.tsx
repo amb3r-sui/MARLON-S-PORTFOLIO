@@ -1,14 +1,97 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { Check } from "lucide-react";
+import { Check, GraduationCap, MapPin } from "@phosphor-icons/react/dist/ssr";
 import { CTA } from "@/components/ui/CTA";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { profile } from "@/data/profile";
 import { career } from "@/data/career";
 import { skillGroups } from "@/data/skills";
 import { ResumeButton } from "@/components/ui/ResumeButton";
 import { ToolGrid } from "@/components/ui/ToolGrid";
-export const metadata: Metadata = { title: "About", description: "Learn about Marlon Magno’s practical approach to AI automation, workflow design, integrations, and documentation." };
-const approach = ["Understand the real business process","Remove unnecessary manual steps","Keep humans involved in important decisions","Validate data before processing","Plan for errors and edge cases","Protect credentials and customer information","Document how the automation works","Keep the solution maintainable"];
-const building = ["AI receptionists","CRM workflows","Inventory automations","Quotation systems","Data synchronization workflows","Business operations dashboards"];
-export default function AboutPage() { return <><section className="page-hero"><div className="container narrow"><span className="eyebrow">About me</span><h1>Automation should make work clearer, not more complicated.</h1><p>{career.summary}</p><div className="button-row"><ResumeButton /><Link className="button button-secondary" href="/contact">Start a conversation</Link></div></div></section><section className="section"><div className="container split-layout"><div><SectionHeading eyebrow="My approach" title="Reliable systems start with the real process" description="My goal is to reduce repetitive work while keeping important decisions visible, secure, and maintainable." /><div className="check-list">{approach.map((item) => <div key={item}><Check />{item}</div>)}</div></div><aside className="profile-panel"><span className="eyebrow">Experience</span><h3>{career.experience.role}</h3><p>{career.experience.organization}</p><dl><div><dt>Period</dt><dd>{career.experience.dates}</dd></div><div><dt>Location</dt><dd>{profile.location}</dd></div><div><dt>Status</dt><dd>{profile.workPreference}</dd></div></dl></aside></div></section><section className="section section-muted"><div className="container"><SectionHeading eyebrow="Technical toolkit" title="Skills built across the automation lifecycle" /><div className="skills-grid">{skillGroups.map((group) => <article className="skill-card" key={group.title}><h3>{group.title}</h3><div className="tag-row">{group.items.map((item) => <span className="tag" key={item}>{item}</span>)}</div></article>)}</div><div className="tool-grid-wrap"><ToolGrid /></div></div></section><section className="section"><div className="container split-layout"><div><SectionHeading eyebrow="Current work" title="Self-directed automation and integration projects" /><div className="check-list">{career.experience.highlights.map((item) => <div key={item}><Check />{item}</div>)}</div></div><aside className="profile-panel"><span className="eyebrow">Education</span><h3>{career.education.institution}</h3><p>{career.education.program}</p><dl><div><dt>Period</dt><dd>{career.education.dates}</dd></div></dl></aside></div></section><section className="section section-muted"><div className="container"><SectionHeading eyebrow="Currently building" title="Portfolio systems grounded in practical use cases" /><div className="building-grid">{building.map((item) => <div key={item}><span />{item}</div>)}</div></div></section><CTA /></>; }
+
+export const metadata: Metadata = { title: "About", description: "Marlon Magno's experience, education, and practical approach to automation and systems integration." };
+
+const approach = [
+  "Understand the real business process",
+  "Validate data before processing",
+  "Keep humans involved in important decisions",
+  "Plan for duplicates, errors, and provider failures",
+  "Protect credentials and customer information",
+  "Document setup, logic, and maintenance",
+] as const;
+
+const building = ["AI receptionists", "CRM workflows", "Inventory automations", "Quotation systems", "Data synchronization", "Approval workflows"] as const;
+
+export default function AboutPage() {
+  return (
+    <>
+      <section className="page-hero">
+        <div className="container page-hero-grid">
+          <div>
+            <span className="eyebrow">About Marlon</span>
+            <h1>Practical automation, clearly explained.</h1>
+            <p>{career.summary}</p>
+            <div className="button-row"><ResumeButton /><Link className="button button-secondary" href="/contact">Contact</Link></div>
+          </div>
+          <figure className="editorial-figure">
+            <Image src="/images/editorial/integration-workbench.webp" alt="A compact network hub beside a hand-drawn integration map" fill unoptimized sizes="(max-width: 760px) 100vw, 46vw" />
+          </figure>
+        </div>
+      </section>
+
+      <section className="evidence-strip" aria-label="Career highlights">
+        <div className="container evidence-grid">
+          {career.evidence.map((item) => <div key={item.label}><strong>{item.value}</strong><span>{item.label}</span></div>)}
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container approach-layout">
+          <SectionHeading title="How I approach the work" description="Clear logic over unnecessary complexity. Verified data over confident guesses." />
+          <div className="check-list">
+            {approach.map((item) => <div key={item}><Check weight="bold" />{item}</div>)}
+          </div>
+        </div>
+      </section>
+
+      <section className="section section-muted">
+        <div className="container resume-layout">
+          <div>
+            <SectionHeading eyebrow="Experience" title={career.experience.role} description={career.experience.organization} />
+            <div className="resume-meta"><span><MapPin weight="bold" />{career.experience.location}</span><span>{career.experience.dates}</span></div>
+            <div className="experience-notes">{career.experience.highlights.map((item) => <p key={item}>{item}</p>)}</div>
+          </div>
+          <aside className="education-panel">
+            <GraduationCap size={28} weight="bold" />
+            <h3>{career.education.institution}</h3>
+            <p>{career.education.program}</p>
+            <span>{career.education.dates}</span>
+          </aside>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <SectionHeading title="Technical coverage" description="Skills span the full automation lifecycle, from discovery and API contracts to deployment and recovery paths." />
+          <div className="skills-grid">
+            {skillGroups.map((group) => (
+              <article className="skill-card" key={group.title}>
+                <h3>{group.title}</h3>
+                <div className="tag-row">{group.items.map((item) => <span className="tag" key={item}>{item}</span>)}</div>
+              </article>
+            ))}
+          </div>
+          <div className="tool-grid-wrap"><ToolGrid /></div>
+        </div>
+      </section>
+
+      <section className="section section-muted">
+        <div className="container building-layout">
+          <SectionHeading title="Systems I am building" description="Portfolio projects are grounded in practical operating problems and clearly labeled as self-directed work." />
+          <div className="building-grid">{building.map((item) => <div key={item}>{item}</div>)}</div>
+        </div>
+      </section>
+      <CTA />
+    </>
+  );
+}
