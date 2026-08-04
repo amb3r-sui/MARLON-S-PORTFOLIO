@@ -51,10 +51,15 @@ test("production metadata replaces the starter preview", async () => {
 });
 
 test("each primary page publishes its own canonical URL", async () => {
+  const homepage = await render();
+  const canonicalMatch = (await homepage.text()).match(/<link rel="canonical" href="([^"]+)"/);
+  assert.ok(canonicalMatch, "homepage must publish a canonical URL");
+  const canonicalOrigin = new URL(canonicalMatch[1]).origin;
+
   for (const path of ["/about", "/projects", "/services", "/contact"]) {
     const response = await render(path);
     const html = await response.text();
-    assert.match(html, new RegExp(`<link rel="canonical" href="http://localhost:3000${path}"`));
+    assert.ok(html.includes(`<link rel="canonical" href="${canonicalOrigin}${path}"`));
   }
 });
 

@@ -1,23 +1,46 @@
 "use client";
 
-import { Moon, Sun } from "@phosphor-icons/react";
+import { Desktop, Moon, Sun } from "@phosphor-icons/react";
 import { useSyncExternalStore } from "react";
 
-type Theme = "light" | "dark";
+type ThemePreference = "system" | "light" | "dark";
+
+const order: ThemePreference[] = ["system", "light", "dark"];
+
+function nextPreference(preference: ThemePreference): ThemePreference {
+  return order[(order.indexOf(preference) + 1) % order.length] ?? "system";
+}
+
+function applyPreference(preference: ThemePreference) {
+  const system = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  document.documentElement.dataset.themePreference = preference;
+  document.documentElement.dataset.theme = preference === "system" ? system : preference;
+}
 
 export function ThemeToggle() {
-  const theme = useSyncExternalStore(
+  const preference = useSyncExternalStore<ThemePreference>(
     (notify) => {
       window.addEventListener("portfolio-theme-change", notify);
-      return () => window.removeEventListener("portfolio-theme-change", notify);
+      const media = window.matchMedia("(prefers-color-scheme: light)");
+      const handleSystemChange = () => {
+        if (document.documentElement.dataset.themePreference === "system") {
+          applyPreference("system");
+          notify();
+        }
+      };
+      media.addEventListener("change", handleSystemChange);
+      return () => {
+        window.removeEventListener("portfolio-theme-change", notify);
+        media.removeEventListener("change", handleSystemChange);
+      };
     },
-    () => document.documentElement.dataset.theme === "light" ? "light" : "dark",
-    () => "dark",
+    () => (document.documentElement.dataset.themePreference as ThemePreference) || "system",
+    () => "system",
   );
 
   function toggleTheme() {
-    const next: Theme = theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
+    const next = nextPreference(preference);
+    applyPreference(next);
     try {
       localStorage.setItem("portfolio-theme", next);
     } catch {
@@ -26,9 +49,13 @@ export function ThemeToggle() {
     window.dispatchEvent(new Event("portfolio-theme-change"));
   }
 
+  const Icon = preference === "system" ? Desktop : preference === "dark" ? Moon : Sun;
+  const next = nextPreference(preference);
+
   return (
-    <button className="theme-toggle" type="button" onClick={toggleTheme} aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`} aria-pressed={theme === "light"}>
-      {theme === "dark" ? <Sun size={18} weight="bold" /> : <Moon size={18} weight="bold" />}
+    <button className="theme-toggle" type="button" onClick={toggleTheme} aria-label={`Theme: ${preference}. Switch to ${next}.`}>
+      <Icon size={17} weight="bold" />
+      <span>{preference}</span>
     </button>
   );
 }

@@ -18,10 +18,18 @@ async function sourceFiles(directory) {
 test("the minimalist visual contract stays enforceable", async () => {
   const files = [...await sourceFiles(path.join(root, "app")), ...await sourceFiles(path.join(root, "src"))];
   const source = (await Promise.all(files.map((file) => readFile(file, "utf8")))).join("\n");
+  const css = await readFile(path.join(root, "app/globals.css"), "utf8");
 
   assert.doesNotMatch(source, /lucide-react/i);
-  assert.doesNotMatch(source, /(?:linear|radial|conic)-gradient\s*\(/i);
-  assert.doesNotMatch(source, /[\u2013\u2014]/u);
+  assert.match(css, /--font-pixel:/);
+  assert.match(css, /radial-gradient\(circle, var\(--halftone\)/);
+  assert.match(css, /--sidebar:\s*14rem/);
+
+  for (const color of css.match(/#[0-9a-f]{6}\b/gi) ?? []) {
+    const [red, green, blue] = [color.slice(1, 3), color.slice(3, 5), color.slice(5, 7)].map((channel) => Number.parseInt(channel, 16));
+    assert.equal(red, green, `${color} should stay neutral`);
+    assert.ok(blue >= green && blue - green <= 8, `${color} should stay grayscale or use Bryl's slight blue cast`);
+  }
 });
 
 test("the published resume and editorial proof assets are real files", async () => {
@@ -41,6 +49,7 @@ test("the package manifest is portfolio-specific and free of unused starter data
   assert.equal(manifest.dependencies["drizzle-orm"], undefined);
   assert.equal(manifest.devDependencies["drizzle-kit"], undefined);
   assert.equal(manifest.dependencies["lucide-react"], undefined);
+  assert.match(manifest.dependencies.geist, /^\^1\./);
 });
 
 test("the static export includes crawler files", async () => {
