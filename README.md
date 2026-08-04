@@ -140,10 +140,26 @@ Do not prefix secrets with `NEXT_PUBLIC_`, commit them, display them in client-r
 
 ### Vercel
 
-1. Push the repository to GitHub.
-2. Import it into Vercel. The repository exports static output through `next.config.ts`.
-3. Set the two public environment variables.
-4. Use the framework defaults and deploy.
+This repository uses Vinext to create a static multi-page export. It does not emit the `.next` directory expected by Vercel's Next.js preset. The committed `vercel.json` keeps the deployment contract consistent across preview and production builds.
+
+Use these settings when importing the repository:
+
+| Setting | Value |
+| --- | --- |
+| Framework Preset | Other |
+| Root Directory | Repository root (blank) |
+| Build Command | `pnpm build` |
+| Output Directory | `dist/client` |
+| Install Command | Automatic |
+
+Set `NEXT_PUBLIC_SITE_URL` to the public production domain and configure `NEXT_PUBLIC_CONTACT_FORM_ENDPOINT` only when a real contact provider is ready. The build enables clean URLs so exported files such as `about.html` are available at `/about`.
+
+After the first production deployment:
+
+1. Copy the assigned address from **Project Settings → Domains**. Do not assume that an unassigned short `vercel.app` address belongs to this project.
+2. In **Project Settings → Deployment Protection**, keep the production domain public. Preview deployments may remain protected.
+3. Redeploy the `main` branch after changing build, domain, environment, or protection settings.
+4. Smoke-test `/`, `/about`, `/projects/rana-ai-receptionist-system`, `/resume/marlon-magno-resume.pdf`, `/robots.txt`, and `/sitemap.xml`.
 
 ### Netlify
 
