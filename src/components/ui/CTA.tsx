@@ -1,14 +1,15 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 
 export function CTA() {
   return (
-    <section className="section">
-      <div className="container">
-        <div className="cta-panel">
-          <div><span className="eyebrow">Let’s build something reliable</span><h2>Have a repetitive business process that should be automated?</h2><p>Let’s discuss how it can be turned into a clear, maintainable workflow.</p></div>
-          <div className="button-row"><Link className="button button-primary" href="/contact">Contact Me <ArrowRight size={17} /></Link><Link className="button button-secondary" href="/projects">View Projects</Link></div>
+    <section className="section cta-section">
+      <div className="container cta-panel">
+        <div>
+          <h2>Have a process that should run better?</h2>
+          <p>Share the tools, repetitive steps, and desired outcome. I will help map a practical next step.</p>
         </div>
+        <Link className="button button-primary" href="/contact">Contact <ArrowRight size={18} /></Link>
       </div>
     </section>
   );

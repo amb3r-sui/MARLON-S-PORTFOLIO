@@ -14,11 +14,11 @@ async function render(path = "/") {
 }
 
 const pages = [
-  ["/", "Automation clients can"],
-  ["/projects", "Enter the Project Lab"],
-  ["/about", "Automation should make work clearer"],
-  ["/services", "Practical automation help"],
-  ["/contact", "Tell me about the process"],
+  ["/", "Automation, built for trust"],
+  ["/projects", "Automation you can inspect"],
+  ["/about", "Practical automation, clearly explained"],
+  ["/services", "Help for processes that should run better"],
+  ["/contact", "What process needs to improve"],
   ["/projects/rana-ai-receptionist-system", "RANA AI Receptionist"],
   ["/projects/inventory-rfq-automation", "Inventory Replenishment"],
   ["/projects/b2b-ai-lead-triage", "B2B AI Lead Triage"],
@@ -50,7 +50,8 @@ test("production metadata replaces the starter preview", async () => {
 test("homepage leads into real projects instead of a generic dashboard", async () => {
   const response = await render();
   const html = await response.text();
-  assert.match(html, /Choose a real system and test its business outcome/i);
+  assert.match(html, /Systems with visible safeguards/i);
+  assert.match(html, /safe sample run, failure paths, and current project scope/i);
   assert.match(html, /RANA AI Receptionist/i);
   assert.doesNotMatch(html, /Lead-to-CRM orchestration/i);
 });
@@ -68,7 +69,7 @@ test("project simulations are explicitly sample-data only", async () => {
   const html = await response.text();
   assert.match(html, /Isolated workflow simulation/i);
   assert.match(html, /No n8n instance, credential, token, webhook, private workflow export, or production system is connected/i);
-  assert.match(html, /Rana 00 — AI Gateway and Abuse Protection/i);
+  assert.match(html, /Rana 00 - AI Gateway and Abuse Protection/i);
   assert.match(html, /Visible structure/i);
   assert.match(html, /Node inspector/i);
   assert.match(html, /Try the automation in three steps/i);
@@ -85,15 +86,15 @@ test("project simulations are explicitly sample-data only", async () => {
   assert.doesNotMatch(html, /127\.0\.0\.1:5678|localhost:5678|webhook\/[A-Za-z0-9_-]+/i);
 });
 
-test("project lab cards use the audited workflow models", async () => {
+test("project index uses the audited workflow model totals", async () => {
   const response = await render("/projects");
   const html = await response.text();
-  assert.match(html, /11[^<]*Sanitized workflows/i);
-  assert.match(html, /163[^<]*Modeled nodes/i);
+  assert.match(html, /11[^<]*workflow models/i);
+  assert.match(html, /163[^<]*documented nodes/i);
   assert.match(html, /170[^<]*Mapped connections/i);
-  assert.match(html, /Rana 00 — AI Gateway and Abuse Protection/i);
-  assert.match(html, /Inventory Replenishment Stock Check/i);
-  assert.match(html, /B2B AI Lead Triage — Human Review Demo/i);
+  assert.match(html, /RANA AI Receptionist and Booking System/i);
+  assert.match(html, /Inventory Replenishment and Draft RFQ Automation/i);
+  assert.match(html, /B2B AI Lead Triage with Human Review/i);
 });
 
 test("real profile links are rendered safely", async () => {

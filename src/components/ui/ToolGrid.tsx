@@ -1,5 +1,4 @@
-import type { CSSProperties } from "react";
-import { Bot, Braces, DatabaseZap, Webhook } from "lucide-react";
+import { BracketsCurly, Database, Robot, WebhooksLogo } from "@phosphor-icons/react/dist/ssr";
 import {
   siAirtable,
   siDiscord,
@@ -30,25 +29,21 @@ const brandIcons: Partial<Record<TechnologyIcon, SimpleIcon>> = {
   github: siGithub,
 };
 
-const conceptIcons = { webhook: Webhook, api: Braces, ai: Bot, rag: DatabaseZap } as const;
+const conceptIcons = { webhook: WebhooksLogo, api: BracketsCurly, ai: Robot, rag: Database } as const;
 
 function BrandMark({ icon, name }: { icon: SimpleIcon; name: string }) {
-  return (
-    <svg className={`tool-icon brand-${icon.slug}`} viewBox="0 0 24 24" role="img" aria-label={`${name} logo`} style={{ "--brand-color": `#${icon.hex}` } as CSSProperties}>
-      <path fill="currentColor" d={icon.path} />
-    </svg>
-  );
+  return <svg className="tool-icon" viewBox="0 0 24 24" role="img" aria-label={`${name} logo`}><path fill="currentColor" d={icon.path} /></svg>;
 }
 
 export function ToolGrid() {
   return (
-    <div className="tool-grid">
+    <div className="tool-grid" role="list" aria-label="Technical toolkit">
       {technologies.map((tool) => {
         const brand = brandIcons[tool.icon];
         const ConceptIcon = conceptIcons[tool.icon as keyof typeof conceptIcons];
         return (
-          <div className="tool-tile" key={tool.name} tabIndex={0} aria-label={`${tool.name}. Technology used in portfolio workflows.`}>
-            {brand ? <BrandMark icon={brand} name={tool.name} /> : <ConceptIcon className="tool-icon concept-icon" aria-hidden="true" />}
+          <div className="tool-tile" key={tool.name} role="listitem">
+            {brand ? <BrandMark icon={brand} name={tool.name} /> : <ConceptIcon className="tool-icon concept-icon" weight="bold" aria-hidden="true" />}
             <span>{tool.name}</span>
           </div>
         );
