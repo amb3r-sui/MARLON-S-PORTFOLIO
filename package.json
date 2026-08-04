@@ -1,22 +1,22 @@
 {
-  "name": "site-creator-vinext-starter",
-  "version": "0.1.0",
+  "name": "marlon-magno-portfolio",
+  "version": "1.0.0",
   "private": true,
   "engines": {
     "node": ">=22.13.0"
   },
   "scripts": {
     "dev": "vinext dev",
-    "build": "vinext build",
+    "build": "vinext build && node scripts/write-static-seo.mjs",
     "start": "vinext start",
     "typecheck": "tsc --noEmit",
-    "test": "pnpm build && node --test tests/rendered-html.test.mjs tests/workflow-models.test.mjs",
+    "test": "pnpm build && pnpm test:content",
+    "test:content": "node --test tests/rendered-html.test.mjs tests/workflow-models.test.mjs tests/design-system.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
-    "db:generate": "drizzle-kit generate"
+    "check": "pnpm typecheck && pnpm lint && pnpm test"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
-    "drizzle-orm": "0.45.2",
     "motion": "^12.23.12",
     "next": "16.2.6",
     "react": "19.2.6",
@@ -31,7 +31,6 @@
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "6.0.2",
     "@vitejs/plugin-rsc": "0.5.26",
-    "drizzle-kit": "0.31.10",
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.6",
     "react-server-dom-webpack": "19.2.6",

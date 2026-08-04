@@ -3,7 +3,7 @@ import { ProjectFilters } from "@/components/projects/ProjectFilters";
 import { workflowsByProject } from "@/data/workflows";
 import { projects } from "@/data/projects";
 
-export const metadata: Metadata = { title: "Automation Projects", description: "Review Marlon Magno's n8n, AI, CRM, API, and data automation case studies." };
+export const metadata: Metadata = { title: "Automation Projects", description: "Review Marlon Magno's n8n, AI, CRM, API, and data automation case studies.", alternates: { canonical: "/projects" } };
 
 export default function ProjectsPage() {
   const workflows = Object.values(workflowsByProject).flat();

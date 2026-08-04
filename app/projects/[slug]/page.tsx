@@ -13,7 +13,14 @@ export function generateStaticParams() { return projects.map(({ slug }) => ({ sl
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const project = getProject((await params).slug);
   if (!project) return { title: "Project not found" };
-  return { title: project.title, description: project.summary, alternates: { canonical: `/projects/${project.slug}` } };
+  const url = `/projects/${project.slug}`;
+  return {
+    title: project.title,
+    description: project.summary,
+    alternates: { canonical: url },
+    openGraph: { title: project.title, description: project.summary, url, type: "article", images: ["/og-portfolio.png"] },
+    twitter: { card: "summary_large_image", title: project.title, description: project.summary, images: ["/og-portfolio.png"] },
+  };
 }
 
 function CaseSection({ title, intro, children }: { title: string; intro?: string; children: React.ReactNode }) {

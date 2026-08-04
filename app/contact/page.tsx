@@ -4,7 +4,7 @@ import { ContactForm } from "@/components/contact/ContactForm";
 import { profile } from "@/data/profile";
 import { SocialLinks } from "@/components/ui/SocialLinks";
 
-export const metadata: Metadata = { title: "Contact", description: "Contact Marlon Magno about automation projects, collaborations, and remote roles." };
+export const metadata: Metadata = { title: "Contact", description: "Contact Marlon Magno about automation projects, collaborations, and remote roles.", alternates: { canonical: "/contact" } };
 
 export default function ContactPage() {
   return (

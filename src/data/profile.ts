@@ -1,3 +1,6 @@
+const vercelHost = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || (vercelHost ? `https://${vercelHost.replace(/^https?:\/\//, "")}` : "http://localhost:3000");
+
 export const profile = {
   name: "Marlon Magno",
   initials: "MM",
@@ -13,5 +16,5 @@ export const profile = {
   github: "https://github.com/amb3r-sui",
   resumePath: "/resume/marlon-magno-resume.pdf",
   availability: "Available for automation projects and remote roles",
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  siteUrl: siteUrl.replace(/\/$/, ""),
 } as const;

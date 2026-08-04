@@ -9,7 +9,7 @@ import { skillGroups } from "@/data/skills";
 import { ResumeButton } from "@/components/ui/ResumeButton";
 import { ToolGrid } from "@/components/ui/ToolGrid";
 
-export const metadata: Metadata = { title: "About", description: "Marlon Magno's experience, education, and practical approach to automation and systems integration." };
+export const metadata: Metadata = { title: "About", description: "Marlon Magno's experience, education, and practical approach to automation and systems integration.", alternates: { canonical: "/about" } };
 
 const approach = [
   "Understand the real business process",
