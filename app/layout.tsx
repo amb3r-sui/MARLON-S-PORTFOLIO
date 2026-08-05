@@ -29,16 +29,16 @@ const geistPixel = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL(profile.siteUrl),
-  title: { default: "Marlon Magno | Automation & Integration Specialist", template: "%s | Marlon Magno" },
-  description: "Portfolio of Marlon Magno, an Automation & Integration Specialist building secure n8n workflows, AI automations, and connected business systems.",
+  title: { default: "Marlon Magno | AI Automation Specialist", template: "%s | Marlon Magno" },
+  description: "Portfolio of Marlon Magno, an AI Automation Specialist building secure workflows, AI agents, integrations, and operational tools.",
   authors: [{ name: profile.name, url: profile.siteUrl }],
   creator: profile.name,
   category: "technology",
   keywords: ["Marlon Magno", "automation specialist", "n8n developer", "AI automation", "API integration", "CRM automation", "Philippines"],
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
-  openGraph: { title: "Marlon Magno | Automation & Integration Specialist", description: profile.introduction, url: "/", locale: "en_US", type: "website", siteName: "Marlon Magno Portfolio", images: [{ url: "/og-portfolio.png", width: 1200, height: 630, alt: "Marlon Magno automation and integration portfolio" }] },
-  twitter: { card: "summary_large_image", title: "Marlon Magno | Automation & Integration Specialist", description: profile.introduction, images: ["/og-portfolio.png"] },
+  openGraph: { title: "Marlon Magno | AI Automation Specialist", description: profile.introduction, url: "/", locale: "en_US", type: "website", siteName: "Marlon Magno Portfolio", images: [{ url: "/og-portfolio.png", width: 1200, height: 630, alt: "Marlon Magno AI automation portfolio" }] },
+  twitter: { card: "summary_large_image", title: "Marlon Magno | AI Automation Specialist", description: profile.introduction, images: ["/og-portfolio.png"] },
   icons: { icon: "/favicon.svg" },
 };
 

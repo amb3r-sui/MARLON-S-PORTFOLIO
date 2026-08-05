@@ -4,10 +4,10 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || (vercelHost ? `https://${ver
 export const profile = {
   name: "Marlon Magno",
   initials: "MM",
-  title: "Automation & Integration Specialist",
+  title: "AI Automation Specialist",
   tagline: "Reliable workflows. Clear human control.",
   introduction:
-    "I build secure n8n workflows, AI automations, and system integrations with validation, auditability, and human review built in.",
+    "I build reliable AI agents, workflow automations, and system integrations with validation, maintainable handoffs, and human review built in.",
   email: "marlonmagno322@gmail.com",
   phone: "+63 955 917 0110",
   location: "Philippines",

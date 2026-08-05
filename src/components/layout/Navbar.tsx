@@ -33,7 +33,7 @@ export function Navbar() {
       <nav className="container nav-wrap" aria-label="Primary navigation">
         <Link href="/" className="brand" prefetch={false}>
           <span className="brand-mark">{profile.initials}</span>
-          <span className="brand-copy"><strong>{profile.name}</strong><small>Automation & Integration</small></span>
+          <span className="brand-copy"><strong>{profile.name}</strong><small>AI Automation Specialist</small></span>
         </Link>
 
         <div className="desktop-nav">

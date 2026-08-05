@@ -23,8 +23,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-function CaseSection({ title, intro, children }: { title: string; intro?: string; children: React.ReactNode }) {
-  return <section className="case-section"><span className="case-section-label">{title}</span><h2>{title}</h2>{intro && <p className="case-intro">{intro}</p>}{children}</section>;
+function CaseSection({ step, title, intro, children }: { step: string; title: string; intro?: string; children: React.ReactNode }) {
+  return <section className="case-section"><span className="case-section-label">{step}</span><h2>{title}</h2>{intro && <p className="case-intro">{intro}</p>}{children}</section>;
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -58,64 +58,74 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
         <div className="container case-layout">
           <div className="case-main">
-            <CaseSection title="The system">
-              <div className="case-overview">
-                <div><h3>Business problem</h3><p>{project.problem}</p></div>
-                <div><h3>Objective</h3><p>{project.objective}</p><p className="supporting-note"><strong>Built for:</strong> {project.targetUsers}</p></div>
-                <div><h3>Solution</h3><p>{project.solution}</p></div>
+            <CaseSection step="01 · Context" title="Business problem">
+              <p className="case-lead">{project.problem}</p>
+              <p className="supporting-note"><strong>Built for:</strong> {project.targetUsers}</p>
+            </CaseSection>
+
+            <CaseSection step="02 · Value" title="Intended outcome">
+              <p className="case-lead">{project.objective}</p>
+              <div className="impact-note"><strong>Expected operational value</strong><p>{project.businessImpact}</p><small>Design intent shown through a portfolio simulation, not a claim of measured client results.</small></div>
+            </CaseSection>
+
+            <CaseSection step="03 · Approach" title="Solution summary">
+              <p className="case-lead">{project.solution}</p>
+            </CaseSection>
+
+            <CaseSection step="04 · Ownership" title="My responsibilities and technical decisions">
+              <div className="case-overview case-overview-two">
+                <div><h3>My responsibilities</h3><ul>{project.personalContribution.map((item) => <li key={item}>{item}</li>)}</ul></div>
+                <div><h3>Technical decisions</h3><p>{project.automationLogic}</p></div>
               </div>
             </CaseSection>
 
             {project.demoMode === "simulation" && project.demoScenarios.length > 0 && (
-              <CaseSection title="Test the business outcome" intro="Choose fictional data, run the workflow, and inspect its route, safeguard, and result.">
+              <CaseSection step="05 · Demonstration" title="Interactive demonstration" intro="Choose fictional data, review the expected safeguard, run the workflow, and inspect the simulated result.">
                 <WorkflowDemo project={project} />
               </CaseSection>
             )}
 
-            <CaseSection title="Workflow">
-              <WorkflowDiagram steps={project.workflow} />
-            </CaseSection>
-
-            <CaseSection title="Reliability by design">
+            <CaseSection step="06 · Reliability" title="Safeguards and failure handling">
               <div className="reliability-layout">
-                <div><h3>Automation logic</h3><p>{project.automationLogic}</p></div>
-                <div><h3>Data flow</h3><p>{project.dataFlow}</p></div>
                 <div><h3>Error handling</h3><p>{project.errorHandling}</p></div>
                 <aside><ShieldCheck size={24} weight="bold" /><h3>Security considerations</h3><p>{project.security}</p></aside>
               </div>
+              <div className="reliability-rules"><h3>Validation boundaries</h3><ul>{project.validationRules.map((item) => <li key={item}>{item}</li>)}</ul></div>
             </CaseSection>
 
-            <CaseSection title="Inputs, outputs, and validation">
-              <div className="data-contract">
-                <div><h3>Inputs</h3><ul>{project.inputs.map((item) => <li key={item}>{item}</li>)}</ul></div>
-                <div><h3>Outputs</h3><ul>{project.outputs.map((item) => <li key={item}>{item}</li>)}</ul></div>
-                <div><h3>Validation</h3><ul>{project.validationRules.map((item) => <li key={item}>{item}</li>)}</ul></div>
+            <CaseSection step="07 · Inspection" title="Technical details" intro="Open only the implementation evidence you want to inspect.">
+              <div className="case-disclosures">
+                <details>
+                  <summary>Workflow architecture <span>{project.workflow.length} stages</span></summary>
+                  <div className="disclosure-content"><WorkflowDiagram steps={project.workflow} /><h3>Data flow</h3><p>{project.dataFlow}</p></div>
+                </details>
+                <details>
+                  <summary>Inputs, outputs, and capabilities <span>Data contract</span></summary>
+                  <div className="disclosure-content data-contract">
+                    <div><h3>Inputs</h3><ul>{project.inputs.map((item) => <li key={item}>{item}</li>)}</ul></div>
+                    <div><h3>Outputs</h3><ul>{project.outputs.map((item) => <li key={item}>{item}</li>)}</ul></div>
+                    <div><h3>Capabilities</h3><ul>{project.features.map((item) => <li key={item}>{item}</li>)}</ul></div>
+                  </div>
+                </details>
+                <details>
+                  <summary>Project evidence and lessons <span>Optional review</span></summary>
+                  <div className="disclosure-content learning-layout">
+                    <div><h3>Challenges</h3><ul>{project.challenges.map((item) => <li key={item}>{item}</li>)}</ul></div>
+                    <div><h3>Lessons</h3><ul>{project.lessons.map((item) => <li key={item}>{item}</li>)}</ul></div>
+                    <div className="screenshot-grid">{project.screenshots.map((image) => <ImageFallback key={image.src} {...image} />)}</div>
+                  </div>
+                </details>
               </div>
             </CaseSection>
 
-            <CaseSection title="Delivery status">
+            <CaseSection step="08 · Scope" title="Future improvements">
               <div className="delivery-grid">
                 <div><h3>Completed</h3>{project.completed.map((item) => <p key={item}><CheckCircle weight="fill" />{item}</p>)}</div>
                 <div><h3>Planned</h3>{project.planned.map((item) => <p key={item}><ArrowRight />{item}</p>)}</div>
-                <div><h3>Key capabilities</h3><ul>{project.features.map((feature) => <li key={feature}>{feature}</li>)}</ul></div>
-                <div><h3>My contribution</h3><ul>{project.personalContribution.map((item) => <li key={item}>{item}</li>)}</ul></div>
+                <div><h3>Current limitations</h3><ul>{project.limitations.map((item) => <li key={item}>{item}</li>)}</ul></div>
+                <div><h3>Future improvements</h3><ul>{project.futureImprovements.map((item) => <li key={item}>{item}</li>)}</ul></div>
               </div>
             </CaseSection>
-
-            <CaseSection title="Project evidence">
-              <div className="screenshot-grid">{project.screenshots.map((image) => <ImageFallback key={image.src} {...image} />)}</div>
-            </CaseSection>
-
-            <CaseSection title="What this project taught me">
-              <div className="learning-layout">
-                <div><h3>Challenges</h3><ul>{project.challenges.map((item) => <li key={item}>{item}</li>)}</ul></div>
-                <div><h3>Lessons</h3><ul>{project.lessons.map((item) => <li key={item}>{item}</li>)}</ul></div>
-                <details><summary>Current limitations</summary><ul>{project.limitations.map((item) => <li key={item}>{item}</li>)}</ul></details>
-                <details><summary>Future improvements</summary><ul>{project.futureImprovements.map((item) => <li key={item}>{item}</li>)}</ul></details>
-              </div>
-            </CaseSection>
-
-            <div className="impact-note"><strong>Expected operational impact</strong><p>{project.businessImpact}</p><small>This is an expected impact statement, not a claim of verified client results.</small></div>
           </div>
 
           <aside className="case-sidebar">

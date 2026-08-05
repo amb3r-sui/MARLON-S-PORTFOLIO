@@ -185,7 +185,6 @@ function WorkflowCanvas({
   state,
   selectedNode,
   onSelectNode,
-  onExecute,
   onReset,
 }: {
   workflow: WorkflowExplorerDefinition;
@@ -194,7 +193,6 @@ function WorkflowCanvas({
   state: DemoState;
   selectedNode: string;
   onSelectNode: (node: WorkflowExplorerNode) => void;
-  onExecute: () => void;
   onReset: () => void;
 }) {
   const [zoom, setZoom] = useState(workflow.initialZoom ?? 0.62);
@@ -213,9 +211,6 @@ function WorkflowCanvas({
             <i />{state === "idle" ? "Ready" : state === "running" ? "Executing" : "Run complete"}
           </span>
           <button className="n8n-reset" type="button" onClick={onReset} disabled={state === "running"} aria-label="Reset mock execution"><RotateCcw /></button>
-          <button className="n8n-execute" type="button" onClick={onExecute} disabled={state === "running"} data-testid="canvas-run-demo">
-            <Play />{state === "running" ? "Executing…" : "Execute workflow"}
-          </button>
           <div className="zoom-controls" aria-label="Workflow zoom controls">
             <button type="button" onClick={() => setZoom((value) => Math.max(0.12, value - 0.05))} aria-label="Zoom out"><ZoomOut /></button>
             <span>{Math.round(zoom * 100)}%</span>
@@ -405,51 +400,29 @@ export function WorkflowDemo({ project }: { project: Project }) {
         </span>
       </div>
 
-      <section className="demo-guide" aria-labelledby="demo-guide-title">
-        <div>
-          <span className="detail-label">Visitor guide</span>
-          <h3 id="demo-guide-title">Try the automation in three steps</h3>
-          <p>This is a safe portfolio sandbox. Nothing entered here is sent to n8n or any outside service.</p>
-        </div>
-        <ol>
-          <li><span>1</span><div><strong>Choose a workflow</strong><small>Open any of the available sanitized canvases.</small></div></li>
-          <li><span>2</span><div><strong>Configure sample input</strong><small>Edit the fictional business details below.</small></div></li>
-          <li><span>3</span><div><strong>Run and review</strong><small>Read the business result and selected route; inspect technical details only if needed.</small></div></li>
-        </ol>
-      </section>
-
-      <div className="workflow-switcher" role="tablist" aria-label="Select a workflow to explore">
-        {workflows.map((item) => (
-          <button
-            type="button"
-            role="tab"
-            aria-selected={item.id === workflow.id}
-            className={item.id === workflow.id ? "active" : ""}
-            key={item.id}
-            onClick={() => chooseWorkflow(item.id)}
-            data-testid={`workflow-tab-${item.id}`}
-          >
-            {item.shortName}
-          </button>
-        ))}
-      </div>
-
       <section className="mock-workbench outcome-first" aria-labelledby="mock-workbench-title">
         <div className="mock-form">
           <div className="mock-heading">
-            <div><span className="detail-label">Mock execution</span><h3 id="mock-workbench-title">Configure sample input</h3></div>
-            <span className="safe-data-badge"><ShieldCheck /> Fictional data only</span>
+            <div><span className="detail-label">Step 1 · Select a scenario</span><h3 id="mock-workbench-title">Choose the operating condition to test</h3></div>
           </div>
           <label>Test scenario<select value={scenarioId} onChange={(event) => chooseScenario(event.target.value)} data-testid="demo-scenario">{project.demoScenarios.map((item) => <option key={item.id} value={item.id}>{item.title}</option>)}</select></label>
           <p className="demo-description">{scenario.description}</p>
+          <div className="scenario-expectation" aria-live="polite">
+            <div><small>Expected simulated outcome</small><strong>{outcomeCopy[project.slug]?.[scenario.outcome] ?? stateCopy[scenario.outcome]}</strong></div>
+            <div><small>Safeguard or boundary</small><strong>{safeguardCopy[scenario.outcome]}</strong></div>
+          </div>
+          <div className="mock-heading input-heading">
+            <div><span className="detail-label">Step 2 · Review sample input</span><h3>Use or edit the fictional data</h3></div>
+            <span className="safe-data-badge"><ShieldCheck /> Fictional data only</span>
+          </div>
           <div className="demo-fields">{Object.entries(values).map(([key, value]) => <label key={key}>{key.replace(/([A-Z])/g, " $1").replace(/_/g, " ")}<input value={value} onChange={(event) => setValues((current) => ({ ...current, [key]: event.target.value }))} disabled={state === "running"} /></label>)}</div>
-          <div className="button-row"><button className="button button-primary" type="button" onClick={runDemo} disabled={state === "running"} data-testid="run-demo"><Play size={16} />{state === "running" ? "Executing…" : "Execute with mock data"}</button><button className="button button-secondary" type="button" onClick={resetDemo} disabled={state === "running"} data-testid="reset-demo"><RotateCcw size={16} />Reset example</button></div>
+          <div className="button-row"><button className="button button-primary" type="button" onClick={runDemo} disabled={state === "running"} data-testid="run-demo"><Play size={16} />{state === "running" ? "Running demo…" : "Run demo"}</button><button className="button button-secondary" type="button" onClick={resetDemo} disabled={state === "running"} data-testid="reset-demo"><RotateCcw size={16} />Reset sample</button></div>
         </div>
       </section>
 
       <div className="demo-layout execution-layout">
         <section className="demo-panel" aria-labelledby="demo-progress-title">
-          <span className="detail-label">Readable execution path</span>
+          <span className="detail-label">Step 3 · Execution progress</span>
           <h3 id="demo-progress-title">What the automation is doing</h3>
           <ol className="demo-progress">{activePath.map((nodeId, index) => {
             const item = workflow.nodes.find((candidate) => candidate.id === nodeId);
@@ -459,8 +432,8 @@ export function WorkflowDemo({ project }: { project: Project }) {
         </section>
 
         <section className="demo-panel demo-output" aria-labelledby="demo-output-title" aria-live="polite">
-          <span className="detail-label">Business result</span>
-          <h3 id="demo-output-title">What a client would receive</h3>
+          <span className="detail-label">Step 4 · Business result</span>
+          <h3 id="demo-output-title">Operational outcome</h3>
           {state === "idle" && <p>Choose a scenario and run the sample to animate the corresponding branch through this workflow.</p>}
           {state === "running" && <p className="demo-running">Processing fictional sample data…</p>}
           {finished && <><motion.div className={`demo-result ${state}`} data-testid="demo-result" initial={reduceMotion ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.24 }}>{state === "success" ? <CheckCircle2 weight="fill" /> : <AlertTriangle weight="fill" />}<div><strong>{businessOutcome}</strong><p>{output}</p></div></motion.div><div className="outcome-card-grid"><div><small>Final route</small><strong>{routeEnd}</strong></div><div><small>Safeguard demonstrated</small><strong>{safeguardCopy[finalOutcome]}</strong></div><div><small>External systems</small><strong>Simulated, none contacted</strong></div><div><small>Selected path</small><strong>{activePath.length} documented nodes</strong></div></div></>}
@@ -469,7 +442,7 @@ export function WorkflowDemo({ project }: { project: Project }) {
       </div>
 
       <details className="technical-payload">
-        <summary><Braces /> View technical input payload <span>Optional JSON</span></summary>
+        <summary><Braces /> View technical input payload <span>Technical details · optional JSON</span></summary>
         <div className="payload-explainer">
           <div><ShieldCheck /><span><strong>What is this payload?</strong><p>This fictional input object shows how customer or business data is structured before validation and workflow processing. It stays in your browser and is never sent to n8n, an API, or a production system.</p></span></div>
           <dl><div><dt>Purpose</dt><dd>Technical input inspection</dd></div><div><dt>Storage</dt><dd>Browser memory only</dd></div><div><dt>Connected systems</dt><dd>None</dd></div></dl>
@@ -479,8 +452,22 @@ export function WorkflowDemo({ project }: { project: Project }) {
 
       <details className="full-workflow-details">
         <summary><Workflow weight="bold" /> Inspect the full n8n-style workflow <span>{workflow.nodes.length} nodes, {workflow.edges.length} connections</span></summary>
+        <div className="workflow-switcher" role="group" aria-label="Select a workflow to inspect">
+          {workflows.map((item) => (
+            <button
+              type="button"
+              aria-pressed={item.id === workflow.id}
+              className={item.id === workflow.id ? "active" : ""}
+              key={item.id}
+              onClick={() => chooseWorkflow(item.id)}
+              data-testid={`workflow-tab-${item.id}`}
+            >
+              {item.shortName}
+            </button>
+          ))}
+        </div>
         <div className="workflow-summary"><div><span className="detail-label">Selected workflow</span><h3>{workflow.name}</h3><p>{workflow.summary}</p></div><div><small>Trigger</small><strong>{workflow.trigger}</strong><small>Visible structure</small><strong>{workflow.nodes.length} nodes, {workflow.edges.length} connections</strong></div></div>
-        <WorkflowCanvas key={workflow.id} workflow={workflow} activePath={activePath} activeIndex={activeStep} state={state} selectedNode={selectedNode} onSelectNode={(item) => setSelectedNode(item.id)} onExecute={runDemo} onReset={resetDemo} />
+        <WorkflowCanvas key={workflow.id} workflow={workflow} activePath={activePath} activeIndex={activeStep} state={state} selectedNode={selectedNode} onSelectNode={(item) => setSelectedNode(item.id)} onReset={resetDemo} />
         {inspectedNode && <div className="node-inspector" data-testid="node-inspector"><span className={`node-logo kind-${inspectedNode.kind}`}><NodeLogo kind={inspectedNode.kind} /></span><div><span className="detail-label">Node inspector</span><h3>{inspectedNode.label}</h3><p>{inspectedNode.details}</p></div><dl><div><dt>Node type</dt><dd>{inspectedNode.subtitle}</dd></div><div><dt>Mode</dt><dd>Sanitized simulation</dd></div></dl></div>}
       </details>
     </div>

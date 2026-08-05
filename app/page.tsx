@@ -49,8 +49,8 @@ export default function Home() {
           <div className="section-top">
             <SectionHeading
               eyebrow="Selected projects"
-              title="Systems with visible safeguards"
-              description="Explore the business problem, workflow logic, safe sample run, failure paths, and current project scope."
+              title="Operational problems, designed into reliable workflows"
+              description="Explore the business problem, intended outcome, human decision boundary, and client-safe demonstration before inspecting the technical workflow."
             />
             <Link href="/projects" className="text-link">
               View all projects <ArrowRight size={18} />

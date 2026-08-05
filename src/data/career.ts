@@ -1,6 +1,6 @@
 export const career = {
   summary:
-    "Automation and Integration Specialist with two years of hands-on experience building secure n8n workflows, AI automations, and system integrations.",
+    "AI Automation Specialist with two years of hands-on experience building secure n8n workflows, AI automations, and system integrations.",
   evidence: [
     { value: "7", label: "connected workflows in the RANA system" },
     { value: "4", label: "documented automation project families" },
@@ -8,7 +8,7 @@ export const career = {
   ],
   experience: {
     organization: "Self-directed Automation & Integration Projects",
-    role: "Automation & Integration Specialist",
+    role: "AI Automation Specialist",
     dates: "2024-present",
     location: "Philippines",
     highlights: [

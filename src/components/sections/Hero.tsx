@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, DownloadSimple } from "@phosphor-icons/react/dist/ssr";
+import { ArrowRight, ChatCircleText } from "@phosphor-icons/react/dist/ssr";
 import { profile } from "@/data/profile";
 
 export function Hero() {
@@ -9,11 +9,12 @@ export function Hero() {
       <div className="container hero-grid">
         <div className="hero-copy">
           <p className="kicker">{profile.title}</p>
-          <h1>Automation, built for trust.</h1>
-          <p className="hero-intro">Secure n8n workflows, AI automations, and integrations with clear safeguards and human review.</p>
+          <h1>AI automation systems built for real operations.</h1>
+          <p className="hero-intro">I design AI agents, workflow automation, integrations, safeguards, and operational tools for service businesses and operations teams.</p>
+          <p className="hero-value">Reduce repetitive work, clarify handoffs, and keep important decisions under human control.</p>
           <div className="button-row">
             <Link href="/projects" className="button button-primary">View projects <ArrowRight size={18} /></Link>
-            <a href={profile.resumePath} download="marlon-magno-resume.pdf" className="button button-secondary">Download CV <DownloadSimple size={18} /></a>
+            <Link href="/contact" className="button button-secondary">Discuss a role or project <ChatCircleText size={18} /></Link>
           </div>
         </div>
 
